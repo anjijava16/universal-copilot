@@ -1,0 +1,2936 @@
+> 🚨 Note: This log may contain personal information such as the contents of your files or terminal output. Please review the contents carefully before sharing.
+# panel/editAgent - ab1a6331
+
+- [Request Messages](#request-messages)
+  - [System](#system)
+  - [User](#user)
+- [Response](#response)
+
+## Metadata
+<pre><code>
+requestType      : ChatMessages
+model            : claude-haiku-4.5
+maxPromptTokens  : 127997
+maxResponseTokens: 32000
+location         : 7
+otherOptions     : {"stream":true}
+intent           : undefined
+startTime        : 2026-03-28T02:55:11.387Z
+endTime          : 2026-03-28T02:55:13.828Z
+duration         : 2441ms
+ourRequestId     : 66716be5-e42d-4a01-bdec-64070c665b23
+requestId        : 66716be5-e42d-4a01-bdec-64070c665b23
+serverRequestId  : 66716be5-e42d-4a01-bdec-64070c665b23
+timeToFirstToken : 2079ms
+resolved model   : claude-haiku-4-5-20251001
+usage            : {"prompt_tokens":38639,"completion_tokens":63,"total_tokens":38702,"prompt_tokens_details":{"cached_tokens":32880},"completion_tokens_details":{"reasoning_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0}}
+<details>
+<summary>tools (76)     : create_directory, create_file, create_new_jupyter_notebook, create_new_workspace, edit_notebook_file, fetch_webpage, file_search, grep_search, get_changed_files, get_errors, copilot_getNotebookSummary, get_project_setup_info, get_search_view_results, get_vscode_api, github_repo, install_extension, list_dir, memory, multi_replace_string_in_file, read_file, read_notebook_cell_output, replace_string_in_file, resolve_memory_file_uri, run_notebook_cell, run_vscode_command, semantic_search, test_failure, view_image, vscode_askQuestions, vscode_listCodeUsages, vscode_renameSymbol, vscode_searchExtensions_internal, await_terminal, create_and_run_task, get_terminal_output, kill_terminal, manage_todo_list, open_browser_page, run_in_terminal, runSubagent, terminal_last_command, terminal_selection, activate_azure_authentication_and_resource_management, activate_dotnet_project_template_management, azure_bicep-get_azure_verified_module, azureResources_getAzureActivityLog, activate_notebook_kernel_configuration, activate_notebook_package_management, configure_notebook, activate_python_environment_tools, configure_python_environment, install_python_packages, activate_azure_resource_management_tools, activate_azure_cli_tools, activate_azure_subscription_and_resource_group_tools, mcp_azure_mcp_applens, mcp_azure_mcp_azureterraformbestpractices, mcp_azure_mcp_confidentialledger, mcp_azure_mcp_extension_azqr, mcp_azure_mcp_resourcehealth, mcp_azure_mcp_speech, activate_microsoft_docs_tools, mcp_microsoftdocs_microsoft_code_sample_search, activate_python_syntax_validation_tools, activate_python_import_analysis_tools, activate_python_environment_management_tools, activate_python_workspace_management_tools, mcp_pylance_mcp_s_pylanceDocString, mcp_pylance_mcp_s_pylanceInvokeRefactoring, renderMermaidDiagram, mcp_pylance_mcp_s_pylanceImports, mcp_microsoftdocs_microsoft_docs_fetch, mcp_azure_mcp_azd, mcp_azure_mcp_workbooks, mcp_azure_mcp_cloudarchitect, mcp_azure_mcp_bicepschema</summary>[
+    {
+        "name": "create_directory",
+        "description": "Create a new directory structure in the workspace. Will recursively create all directories in the path, like mkdir -p. You do not need to use this tool before using create_file, that tool will automatically create the needed directories.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "dirPath": {
+                    "type": "string",
+                    "description": "The absolute path to the directory to create."
+                }
+            },
+            "required": [
+                "dirPath"
+            ]
+        }
+    },
+    {
+        "name": "create_file",
+        "description": "This is a tool for creating a new file in the workspace. The file will be created with the specified content. The directory will be created if it does not already exist. Never use this tool to edit a file that already exists.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "type": "string",
+                    "description": "The absolute path to the file to create."
+                },
+                "content": {
+                    "type": "string",
+                    "description": "The content to write to the file."
+                }
+            },
+            "required": [
+                "filePath",
+                "content"
+            ]
+        }
+    },
+    {
+        "name": "create_new_jupyter_notebook",
+        "description": "Generates a new Jupyter Notebook (.ipynb) in VS Code. Jupyter Notebooks are interactive documents commonly used for data exploration, analysis, visualization, and combining code with narrative text. Prefer creating plain Python files or similar unless a user explicitly requests creating a new Jupyter Notebook or already has a Jupyter Notebook opened or exists in the workspace.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "The query to use to generate the jupyter notebook. This should be a clear and concise description of the notebook the user wants to create."
+                }
+            },
+            "required": [
+                "query"
+            ]
+        }
+    },
+    {
+        "name": "create_new_workspace",
+        "description": "Get comprehensive setup steps to help the user create complete project structures in a VS Code workspace. This tool is designed for full project initialization and scaffolding, not for creating individual files.\n\nWhen to use this tool:\n- User wants to create a new complete project from scratch\n- Setting up entire project frameworks (TypeScript projects, React apps, Node.js servers, etc.)\n- Initializing Model Context Protocol (MCP) servers with full structure\n- Creating VS Code extensions with proper scaffolding\n- Setting up Next.js, Vite, or other framework-based projects\n- User asks for \"new project\", \"create a workspace\", \"set up a [framework] project\"\n- Need to establish complete development environment with dependencies, config files, and folder structure\n\nWhen NOT to use this tool:\n- Creating single files or small code snippets\n- Adding individual files to existing projects\n- Making modifications to existing codebases\n- User asks to \"create a file\" or \"add a component\"\n- Simple code examples or demonstrations\n- Debugging or fixing existing code\n\nThis tool provides complete project setup including:\n- Folder structure creation\n- Package.json and dependency management\n- Configuration files (tsconfig, eslint, etc.)\n- Initial boilerplate code\n- Development environment setup\n- Build and run instructions\n\nUse other file creation tools for individual files within existing projects.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "The query to use to generate the new workspace. This should be a clear and concise description of the workspace the user wants to create."
+                }
+            },
+            "required": [
+                "query"
+            ]
+        }
+    },
+    {
+        "name": "edit_notebook_file",
+        "description": "This is a tool for editing an existing Notebook file in the workspace. Generate the \"explanation\" property first.\nThe system is very smart and can understand how to apply your edits to the notebooks.\nWhen updating the content of an existing cell, ensure newCode preserves whitespace and indentation exactly and does NOT include any code markers such as (...existing code...).",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "type": "string",
+                    "description": "An absolute path to the notebook file to edit, or the URI of a untitled, not yet named, file, such as `untitled:Untitled-1."
+                },
+                "cellId": {
+                    "type": "string",
+                    "description": "Id of the cell that needs to be deleted or edited. Use the value `TOP`, `BOTTOM` when inserting a cell at the top or bottom of the notebook, else provide the id of the cell after which a new cell is to be inserted. Remember, if a cellId is provided and editType=insert, then a cell will be inserted after the cell with the provided cellId."
+                },
+                "newCode": {
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "description": "The code for the new or existing cell to be edited. Code should not be wrapped within <VSCode.Cell> tags. Do NOT include code markers such as (...existing code...) to indicate existing code."
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "description": "The code for the new or existing cell to be edited. Code should not be wrapped within <VSCode.Cell> tags"
+                            }
+                        }
+                    ]
+                },
+                "language": {
+                    "type": "string",
+                    "description": "The language of the cell. `markdown`, `python`, `javascript`, `julia`, etc."
+                },
+                "editType": {
+                    "type": "string",
+                    "enum": [
+                        "insert",
+                        "delete",
+                        "edit"
+                    ],
+                    "description": "The operation peformed on the cell, whether `insert`, `delete` or `edit`.\nUse the `editType` field to specify the operation: `insert` to add a new cell, `edit` to modify an existing cell's content, and `delete` to remove a cell."
+                }
+            },
+            "required": [
+                "filePath",
+                "editType",
+                "cellId"
+            ]
+        }
+    },
+    {
+        "name": "fetch_webpage",
+        "description": "Fetches the main content from a web page. This tool is useful for summarizing or analyzing the content of a webpage. You should use this tool when you think the user is looking for information from a specific webpage.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "urls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "An array of URLs to fetch content from."
+                },
+                "query": {
+                    "type": "string",
+                    "description": "The query to search for in the web page's content. This should be a clear and concise description of the content you want to find."
+                }
+            },
+            "required": [
+                "urls",
+                "query"
+            ]
+        }
+    },
+    {
+        "name": "file_search",
+        "description": "Search for files in the workspace by glob pattern. This only returns the paths of matching files. Use this tool when you know the exact filename pattern of the files you're searching for. Glob patterns match from the root of the workspace folder. Examples:\n- **/*.{js,ts} to match all js/ts files in the workspace.\n- src/** to match all files under the top-level src folder.\n- **/foo/**/*.js to match all js files under any foo folder in the workspace.\n\nIn a multi-root workspace, you can scope the search to a specific workspace folder by using the absolute path to the folder as the query, e.g. /path/to/folder/**/*.ts.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "Search for files with names or paths matching this glob pattern. Can also be an absolute path to a workspace folder to scope the search in a multi-root workspace."
+                },
+                "maxResults": {
+                    "type": "number",
+                    "description": "The maximum number of results to return. Do not use this unless necessary, it can slow things down. By default, only some matches are returned. If you use this and don't see what you're looking for, you can try again with a more specific query or a larger maxResults."
+                }
+            },
+            "required": [
+                "query"
+            ]
+        }
+    },
+    {
+        "name": "grep_search",
+        "description": "Do a fast text search in the workspace. Use this tool when you want to search with an exact string or regex. If you are not sure what words will appear in the workspace, prefer using regex patterns with alternation (|) or character classes to search for multiple potential words at once instead of making separate searches. For example, use 'function|method|procedure' to look for all of those words at once. Use includePattern to search within files matching a specific pattern, or in a specific file, using a relative path. Use 'includeIgnoredFiles' to include files normally ignored by .gitignore, other ignore files, and `files.exclude` and `search.exclude` settings. Warning: using this may cause the search to be slower, only set it when you want to search in ignored folders like node_modules or build outputs. Use this tool when you want to see an overview of a particular file, instead of using read_file many times to look for code within a file.\n\nIn a multi-root workspace, you can scope the search to a specific workspace folder by using the absolute path to the folder as the includePattern, e.g. /path/to/folder.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "The pattern to search for in files in the workspace. Use regex with alternation (e.g., 'word1|word2|word3') or character classes to find multiple potential words in a single search. Be sure to set the isRegexp property properly to declare whether it's a regex or plain text pattern. Is case-insensitive."
+                },
+                "isRegexp": {
+                    "type": "boolean",
+                    "description": "Whether the pattern is a regex."
+                },
+                "includePattern": {
+                    "type": "string",
+                    "description": "Search files matching this glob pattern. Will be applied to the relative path of files within the workspace. To search recursively inside a folder, use a proper glob pattern like \"src/folder/**\". Do not use | in includePattern. Can also be an absolute path to a workspace folder to scope the search in a multi-root workspace."
+                },
+                "maxResults": {
+                    "type": "number",
+                    "description": "The maximum number of results to return. Do not use this unless necessary, it can slow things down. By default, only some matches are returned. If you use this and don't see what you're looking for, you can try again with a more specific query or a larger maxResults."
+                },
+                "includeIgnoredFiles": {
+                    "type": "boolean",
+                    "description": "Whether to include files that would normally be ignored according to .gitignore, other ignore files and `files.exclude` and `search.exclude` settings. Warning: using this may cause the search to be slower. Only set it when you want to search in ignored folders like node_modules or build outputs."
+                }
+            },
+            "required": [
+                "query",
+                "isRegexp"
+            ]
+        }
+    },
+    {
+        "name": "get_changed_files",
+        "description": "Get git diffs of current file changes in a git repository. Don't forget that you can use run_in_terminal to run git commands in a terminal as well.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "repositoryPath": {
+                    "type": "string",
+                    "description": "The absolute path to the git repository to look for changes in. If not provided, the active git repository will be used."
+                },
+                "sourceControlState": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "staged",
+                            "unstaged",
+                            "merge-conflicts"
+                        ]
+                    },
+                    "description": "The kinds of git state to filter by. Allowed values are: 'staged', 'unstaged', and 'merge-conflicts'. If not provided, all states will be included."
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "get_errors",
+        "description": "Get any compile or lint errors in a specific file or across all files. If the user mentions errors or problems in a file, they may be referring to these. Use the tool to see the same errors that the user is seeing. If the user asks you to analyze all errors, or does not specify a file, use this tool to gather errors for all files. Also use this tool after editing a file to validate the change.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePaths": {
+                    "description": "The absolute paths to the files or folders to check for errors. Omit 'filePaths' when retrieving all errors.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "copilot_getNotebookSummary",
+        "description": "This is a tool returns the list of the Notebook cells along with the id, cell types, line ranges, language, execution information and output mime types for each cell. This is useful to get Cell Ids when executing a notebook or determine what cells have been executed and what order, or what cells have outputs. If required to read contents of a cell use this to determine the line range of a cells, and then use read_file tool to read a specific line range. Requery this tool if the contents of the notebook change.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "type": "string",
+                    "description": "An absolute path to the notebook file with the cell to run, or the URI of a untitled, not yet named, file, such as `untitled:Untitled-1.ipynb"
+                }
+            },
+            "required": [
+                "filePath"
+            ]
+        }
+    },
+    {
+        "name": "get_project_setup_info",
+        "description": "Do not call this tool without first calling the tool to create a workspace. This tool provides a project setup information for a Visual Studio Code workspace based on a project type and programming language.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "projectType": {
+                    "type": "string",
+                    "description": "The type of project to create. Supported values are: 'python-script', 'python-project', 'mcp-server', 'model-context-protocol-server', 'vscode-extension', 'next-js', 'vite' and 'other'"
+                }
+            },
+            "required": [
+                "projectType"
+            ]
+        }
+    },
+    {
+        "name": "get_search_view_results",
+        "description": "The results from the search view",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "get_vscode_api",
+        "description": "Get comprehensive VS Code API documentation and references for extension development. This tool provides authoritative documentation for VS Code's extensive API surface, including proposed APIs, contribution points, and best practices. Use this tool for understanding complex VS Code API interactions.\n\nWhen to use this tool:\n- User asks about specific VS Code APIs, interfaces, or extension capabilities\n- Need documentation for VS Code extension contribution points (commands, views, settings, etc.)\n- Questions about proposed APIs and their usage patterns\n- Understanding VS Code extension lifecycle, activation events, and packaging\n- Best practices for VS Code extension development architecture\n- API examples and code patterns for extension features\n- Troubleshooting extension-specific issues or API limitations\n\nWhen NOT to use this tool:\n- Creating simple standalone files or scripts unrelated to VS Code extensions\n- General programming questions not specific to VS Code extension development\n- Questions about using VS Code as an editor (user-facing features)\n- Non-extension related development tasks\n- File creation or editing that doesn't involve VS Code extension APIs\n\nCRITICAL usage guidelines:\n1. Always include specific API names, interfaces, or concepts in your query\n2. Mention the extension feature you're trying to implement\n3. Include context about proposed vs stable APIs when relevant\n4. Reference specific contribution points when asking about extension manifest\n5. Be specific about the VS Code version or API version when known\n\nScope: This tool is for EXTENSION DEVELOPMENT ONLY - building tools that extend VS Code itself, not for general file creation or non-extension programming tasks.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "The query to search vscode documentation for. Should contain all relevant context."
+                }
+            },
+            "required": [
+                "query"
+            ]
+        }
+    },
+    {
+        "name": "github_repo",
+        "description": "Searches a GitHub repository for relevant source code snippets. Only use this tool if the user is very clearly asking for code snippets from a specific GitHub repository. Do not use this tool for Github repos that the user has open in their workspace.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "repo": {
+                    "type": "string",
+                    "description": "The name of the Github repository to search for code in. Should must be formatted as '<owner>/<repo>'."
+                },
+                "query": {
+                    "type": "string",
+                    "description": "The query to search for repo. Should contain all relevant context."
+                }
+            },
+            "required": [
+                "repo",
+                "query"
+            ]
+        }
+    },
+    {
+        "name": "install_extension",
+        "description": "Install an extension in VS Code. Use this tool to install an extension in Visual Studio Code as part of a new workspace creation process only.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The ID of the extension to install. This should be in the format <publisher>.<extension>."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the extension to install. This should be a clear and concise description of the extension."
+                }
+            },
+            "required": [
+                "id",
+                "name"
+            ]
+        }
+    },
+    {
+        "name": "list_dir",
+        "description": "List the contents of a directory. Result will have the name of the child. If the name ends in /, it's a folder, otherwise a file",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "The absolute path to the directory to list."
+                }
+            },
+            "required": [
+                "path"
+            ]
+        }
+    },
+    {
+        "name": "memory",
+        "description": "Manage a persistent memory system with three scopes for storing notes and information across conversations.\n\nMemory is organized under /memories/ with three tiers:\n- `/memories/` — User memory: persistent notes that survive across all workspaces and conversations. Store preferences, patterns, and general insights here.\n- `/memories/session/` — Session memory: notes scoped to the current conversation. Store task-specific context and in-progress notes here. Cleared after the conversation ends.\n- `/memories/repo/` — Repository memory: repository-scoped facts stored via Copilot. Only the `create` command is supported for this path.\n\nIMPORTANT: Before creating new memory files, first view the /memories/ directory to understand what already exists. This helps avoid duplicates and maintain organized notes.\n\nCommands:\n- `view`: View contents of a file or list directory contents. Can be used on files or directories (e.g., \"/memories/\" to see all top-level items).\n- `create`: Create a new file at the specified path with the given content. Fails if the file already exists.\n- `str_replace`: Replace an exact string in a file with a new string. The old_str must appear exactly once in the file.\n- `insert`: Insert text at a specific line number in a file. Line 0 inserts at the beginning.\n- `delete`: Delete a file or directory (and all its contents).\n- `rename`: Rename or move a file or directory from path to new_path. Cannot rename across scopes.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string",
+                    "enum": [
+                        "view",
+                        "create",
+                        "str_replace",
+                        "insert",
+                        "delete",
+                        "rename"
+                    ],
+                    "description": "The operation to perform on the memory file system."
+                },
+                "path": {
+                    "type": "string",
+                    "description": "The absolute path to the file or directory inside /memories/, e.g. \"/memories/notes.md\". Used by all commands except `rename`."
+                },
+                "file_text": {
+                    "type": "string",
+                    "description": "Required for `create`. The content of the file to create."
+                },
+                "old_str": {
+                    "type": "string",
+                    "description": "Required for `str_replace`. The exact string in the file to replace. Must appear exactly once."
+                },
+                "new_str": {
+                    "type": "string",
+                    "description": "Required for `str_replace`. The new string to replace old_str with."
+                },
+                "insert_line": {
+                    "type": "number",
+                    "description": "Required for `insert`. The 0-based line number to insert text at. 0 inserts before the first line."
+                },
+                "insert_text": {
+                    "type": "string",
+                    "description": "Required for `insert`. The text to insert at the specified line."
+                },
+                "view_range": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "description": "Optional for `view`. A two-element array [start_line, end_line] (1-indexed) to view a specific range of lines."
+                },
+                "old_path": {
+                    "type": "string",
+                    "description": "Required for `rename`. The current path of the file or directory to rename."
+                },
+                "new_path": {
+                    "type": "string",
+                    "description": "Required for `rename`. The new path for the file or directory."
+                }
+            },
+            "required": [
+                "command"
+            ]
+        }
+    },
+    {
+        "name": "multi_replace_string_in_file",
+        "description": "This tool allows you to apply multiple replace_string_in_file operations in a single call, which is more efficient than calling replace_string_in_file multiple times. It takes an array of replacement operations and applies them sequentially. Each replacement operation has the same parameters as replace_string_in_file: filePath, oldString, newString, and explanation. This tool is ideal when you need to make multiple edits across different files or multiple edits in the same file. The tool will provide a summary of successful and failed operations.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "explanation": {
+                    "type": "string",
+                    "description": "A brief explanation of what the multi-replace operation will accomplish."
+                },
+                "replacements": {
+                    "type": "array",
+                    "description": "An array of replacement operations to apply sequentially.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "filePath": {
+                                "type": "string",
+                                "description": "An absolute path to the file to edit."
+                            },
+                            "oldString": {
+                                "type": "string",
+                                "description": "The exact literal text to replace, preferably unescaped. Include at least 3 lines of context BEFORE and AFTER the target text, matching whitespace and indentation precisely. If this string is not the exact literal text or does not match exactly, this replacement will fail."
+                            },
+                            "newString": {
+                                "type": "string",
+                                "description": "The exact literal text to replace `oldString` with, preferably unescaped. Provide the EXACT text. Ensure the resulting code is correct and idiomatic."
+                            }
+                        },
+                        "required": [
+                            "filePath",
+                            "oldString",
+                            "newString"
+                        ]
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": [
+                "explanation",
+                "replacements"
+            ]
+        }
+    },
+    {
+        "name": "read_file",
+        "description": "Read the contents of a file.\n\nYou must specify the line range you're interested in. Line numbers are 1-indexed. If the file contents returned are insufficient for your task, you may call this tool again to retrieve more content. Prefer reading larger ranges over doing many small reads. Binary files use startLine/endLine as byte offsets.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "description": "The absolute path of the file to read.",
+                    "type": "string"
+                },
+                "startLine": {
+                    "type": "number",
+                    "description": "The line number to start reading from, 1-based."
+                },
+                "endLine": {
+                    "type": "number",
+                    "description": "The inclusive line number to end reading at, 1-based."
+                }
+            },
+            "required": [
+                "filePath",
+                "startLine",
+                "endLine"
+            ]
+        }
+    },
+    {
+        "name": "read_notebook_cell_output",
+        "description": "This tool will retrieve the output for a notebook cell from its most recent execution or restored from disk. The cell may have output even when it has not been run in the current kernel session. This tool has a higher token limit for output length than the runNotebookCell tool.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "type": "string",
+                    "description": "An absolute path to the notebook file with the cell to run, or the URI of a untitled, not yet named, file, such as `untitled:Untitled-1.ipynb"
+                },
+                "cellId": {
+                    "type": "string",
+                    "description": "The ID of the cell for which output should be retrieved."
+                }
+            },
+            "required": [
+                "filePath",
+                "cellId"
+            ]
+        }
+    },
+    {
+        "name": "replace_string_in_file",
+        "description": "This is a tool for making edits in an existing file in the workspace. For moving or renaming files, use run in terminal tool with the 'mv' command instead. For larger edits, split them into smaller edits and call the edit tool multiple times to ensure accuracy. Before editing, always ensure you have the context to understand the file's contents and context. To edit a file, provide: 1) filePath (absolute path), 2) oldString (MUST be the exact literal text to replace including all whitespace, indentation, newlines, and surrounding code etc), and 3) newString (MUST be the exact literal text to replace \\`oldString\\` with (also including all whitespace, indentation, newlines, and surrounding code etc.). Ensure the resulting code is correct and idiomatic.). Each use of this tool replaces exactly ONE occurrence of oldString.\n\nCRITICAL for \\`oldString\\`: Must uniquely identify the single instance to change. Include at least 3 lines of context BEFORE and AFTER the target text, matching whitespace and indentation precisely. If this string matches multiple locations, or does not match exactly, the tool will fail. Never use 'Lines 123-456 omitted' from summarized documents or ...existing code... comments in the oldString or newString.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "type": "string",
+                    "description": "An absolute path to the file to edit."
+                },
+                "oldString": {
+                    "type": "string",
+                    "description": "The exact literal text to replace, preferably unescaped. For single replacements (default), include at least 3 lines of context BEFORE and AFTER the target text, matching whitespace and indentation precisely. For multiple replacements, specify expected_replacements parameter. If this string is not the exact literal text (i.e. you escaped it) or does not match exactly, the tool will fail."
+                },
+                "newString": {
+                    "type": "string",
+                    "description": "The exact literal text to replace `old_string` with, preferably unescaped. Provide the EXACT text. Ensure the resulting code is correct and idiomatic."
+                }
+            },
+            "required": [
+                "filePath",
+                "oldString",
+                "newString"
+            ]
+        }
+    },
+    {
+        "name": "resolve_memory_file_uri",
+        "description": "Resolve a memory file path (like /memories/session/plan.md or /memories/repo/notes.md) to its fully qualified URI. Use this when you need the actual URI for a memory file, for example to pass it to setArtifacts. The path must start with /memories/.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "The memory file path to resolve (e.g. /memories/session/plan.md)."
+                }
+            },
+            "required": [
+                "path"
+            ]
+        }
+    },
+    {
+        "name": "run_notebook_cell",
+        "description": "This is a tool for running a code cell in a notebook file directly in the notebook editor. The output from the execution will be returned. Code cells should be run as they are added or edited when working through a problem to bring the kernel state up to date and ensure the code executes successfully. Code cells are ready to run and don't require any pre-processing. If asked to run the first cell in a notebook, you should run the first code cell since markdown cells cannot be executed. NOTE: Avoid executing Markdown cells or providing Markdown cell IDs, as Markdown cells cannot be  executed.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "type": "string",
+                    "description": "An absolute path to the notebook file with the cell to run, or the URI of a untitled, not yet named, file, such as `untitled:Untitled-1.ipynb"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": "An optional explanation of why the cell is being run. This will be shown to the user before the tool is run and is not necessary if it's self-explanatory."
+                },
+                "cellId": {
+                    "type": "string",
+                    "description": "The ID for the code cell to execute. Avoid providing markdown cell IDs as nothing will be executed."
+                },
+                "continueOnError": {
+                    "type": "boolean",
+                    "description": "Whether or not execution should continue for remaining cells if an error is encountered. Default to false unless instructed otherwise."
+                }
+            },
+            "required": [
+                "filePath",
+                "cellId"
+            ]
+        }
+    },
+    {
+        "name": "run_vscode_command",
+        "description": "Run a command in VS Code. Use this tool to run a command in Visual Studio Code as part of a new workspace creation process only.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "commandId": {
+                    "type": "string",
+                    "description": "The ID of the command to execute. This should be in the format <command>."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the command to execute. This should be a clear and concise description of the command."
+                },
+                "args": {
+                    "type": "array",
+                    "description": "The arguments to pass to the command. This should be an array of strings.",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "skipCheck": {
+                    "type": "boolean",
+                    "description": "If true, skip checking whether the command exists before executing it."
+                }
+            },
+            "required": [
+                "commandId",
+                "name"
+            ]
+        }
+    },
+    {
+        "name": "semantic_search",
+        "description": "Run a natural language search for relevant code or documentation comments from the user's current workspace. Returns relevant code snippets from the user's current workspace if it is large, or the full contents of the workspace if it is small.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "The query to search the codebase for. Should contain all relevant context. Should ideally be text that might appear in the codebase, such as function names, variable names, or comments."
+                }
+            },
+            "required": [
+                "query"
+            ]
+        }
+    },
+    {
+        "name": "test_failure",
+        "description": "Includes test failure information in the prompt.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "view_image",
+        "description": "View the contents of an image file. Use this instead of read_file for supported image files such as png, jpg, jpeg, gif, and webp. The tool returns the image directly to multimodal models and does not take line ranges or offsets.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "description": "The absolute path of the image file to view.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "filePath"
+            ]
+        }
+    },
+    {
+        "name": "vscode_askQuestions",
+        "description": "Use this tool to ask the user a small number of clarifying questions before proceeding. Provide the questions array with concise headers and prompts. Use options for fixed choices, set multiSelect when multiple selections are allowed. Users can always provide a freeform text answer alongside options unless you set allowFreeformInput to false.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "questions": {
+                    "type": "array",
+                    "description": "List of questions to ask the user. Order is preserved.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "header": {
+                                "type": "string",
+                                "description": "Short identifier for the question. Must be unique so answers can be mapped back to the question.",
+                                "maxLength": 50
+                            },
+                            "question": {
+                                "type": "string",
+                                "description": "The question text to display to the user. Keep it concise, ideally one sentence.",
+                                "maxLength": 200
+                            },
+                            "multiSelect": {
+                                "type": "boolean",
+                                "description": "Allow selecting multiple options when options are provided."
+                            },
+                            "allowFreeformInput": {
+                                "type": "boolean",
+                                "description": "Allow freeform text answers in addition to option selection. Defaults to true; set to false to restrict to predefined options only."
+                            },
+                            "options": {
+                                "type": "array",
+                                "description": "Optional list of selectable answers. If omitted, the question is free text.",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "label": {
+                                            "type": "string",
+                                            "description": "Display label and value for the option."
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "description": "Optional secondary text shown with the option."
+                                        },
+                                        "recommended": {
+                                            "type": "boolean",
+                                            "description": "Mark this option as the recommended default."
+                                        }
+                                    },
+                                    "required": [
+                                        "label"
+                                    ]
+                                }
+                            }
+                        },
+                        "required": [
+                            "header",
+                            "question"
+                        ]
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": [
+                "questions"
+            ]
+        }
+    },
+    {
+        "name": "vscode_listCodeUsages",
+        "description": "Find all usages (references, definitions, and implementations) of a code symbol across the workspace. This tool locates where a symbol is referenced, defined, or implemented.\n\nInput:\n- \"symbol\": The exact name of the symbol to search for (function, class, method, variable, type, etc.).\n- \"uri\": A full URI (e.g. \"file:///path/to/file.ts\") of a file where the symbol appears. Provide either \"uri\" or \"filePath\".\n- \"filePath\": A workspace-relative file path (e.g. \"src/utils/helpers.ts\") of a file where the symbol appears. Provide either \"uri\" or \"filePath\".\n- \"lineContent\": A substring of the line of code where the symbol appears. This is used to locate the exact position in the file. Must be the actual text from the file - do NOT fabricate it.\n\nIMPORTANT: The file and line do NOT need to be the definition of the symbol. Any occurrence works - a usage, an import, a call site, etc. You can pick whichever occurrence is most convenient.\n\nIf the tool returns an error, retry with corrected input - ensure the file path is correct, the line content matches the actual file content, and the symbol name appears in that line.\n\nCurrently supported for: chatagent, instructions, json, markdown, prompt, python, skill.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "symbol": {
+                    "type": "string",
+                    "description": "The exact name of the symbol (function, class, method, variable, type, etc.) to find usages of."
+                },
+                "uri": {
+                    "type": "string",
+                    "description": "A full URI of a file where the symbol appears (e.g. \"file:///path/to/file.ts\"). Provide either \"uri\" or \"filePath\"."
+                },
+                "filePath": {
+                    "type": "string",
+                    "description": "A workspace-relative file path where the symbol appears (e.g. \"src/utils/helpers.ts\"). Provide either \"uri\" or \"filePath\"."
+                },
+                "lineContent": {
+                    "type": "string",
+                    "description": "A substring of the line of code where the symbol appears. Used to locate the exact position. Must be actual text from the file."
+                }
+            },
+            "required": [
+                "symbol",
+                "lineContent"
+            ]
+        }
+    },
+    {
+        "name": "vscode_renameSymbol",
+        "description": "Rename a code symbol across the workspace using the language server's rename functionality. This performs a precise, semantics-aware rename that updates all references.\n\nInput:\n- \"symbol\": The exact current name of the symbol to rename.\n- \"newName\": The new name for the symbol.\n- \"uri\": A full URI (e.g. \"file:///path/to/file.ts\") of a file where the symbol appears. Provide either \"uri\" or \"filePath\".\n- \"filePath\": A workspace-relative file path (e.g. \"src/utils/helpers.ts\") of a file where the symbol appears. Provide either \"uri\" or \"filePath\".\n- \"lineContent\": A substring of the line of code where the symbol appears. This is used to locate the exact position in the file. Must be the actual text from the file - do NOT fabricate it.\n\nIMPORTANT: The file and line do NOT need to be the definition of the symbol. Any occurrence works - a usage, an import, a call site, etc. You can pick whichever occurrence is most convenient.\n\nIf the tool returns an error, retry with corrected input - ensure the file path is correct, the line content matches the actual file content, and the symbol name appears in that line.\n\nCurrently supported for: chatagent, instructions, markdown, prompt, python, skill.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "symbol": {
+                    "type": "string",
+                    "description": "The exact current name of the symbol to rename."
+                },
+                "newName": {
+                    "type": "string",
+                    "description": "The new name for the symbol."
+                },
+                "uri": {
+                    "type": "string",
+                    "description": "A full URI of a file where the symbol appears (e.g. \"file:///path/to/file.ts\"). Provide either \"uri\" or \"filePath\"."
+                },
+                "filePath": {
+                    "type": "string",
+                    "description": "A workspace-relative file path where the symbol appears (e.g. \"src/utils/helpers.ts\"). Provide either \"uri\" or \"filePath\"."
+                },
+                "lineContent": {
+                    "type": "string",
+                    "description": "A substring of the line of code where the symbol appears. Used to locate the exact position. Must be actual text from the file."
+                }
+            },
+            "required": [
+                "symbol",
+                "newName",
+                "lineContent"
+            ]
+        }
+    },
+    {
+        "name": "vscode_searchExtensions_internal",
+        "description": "This is a tool for browsing Visual Studio Code Extensions Marketplace. It allows the model to search for extensions and retrieve detailed information about them. The model should use this tool whenever it needs to discover extensions or resolve information about known ones. To use the tool, the model has to provide the category of the extensions, relevant search keywords, or known extension IDs. Note that search results may include false positives, so reviewing and filtering is recommended.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "description": "The category of extensions to search for",
+                    "enum": [
+                        "AI",
+                        "Azure",
+                        "Chat",
+                        "Data Science",
+                        "Debuggers",
+                        "Extension Packs",
+                        "Education",
+                        "Formatters",
+                        "Keymaps",
+                        "Language Packs",
+                        "Linters",
+                        "Machine Learning",
+                        "Notebooks",
+                        "Programming Languages",
+                        "SCM Providers",
+                        "Snippets",
+                        "Testing",
+                        "Themes",
+                        "Visualization",
+                        "Other"
+                    ]
+                },
+                "keywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The keywords to search for"
+                },
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The ids of the extensions to search for"
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "await_terminal",
+        "description": "Wait for a background terminal command to complete. Returns the output, exit code, or timeout status.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The ID of the terminal to await (returned by run_in_terminal when isBackground=true)."
+                },
+                "timeout": {
+                    "type": "number",
+                    "description": "Timeout in milliseconds. If the command does not complete within this time, returns the output collected so far with a timeout indicator. Use 0 for no timeout."
+                }
+            },
+            "required": [
+                "id",
+                "timeout"
+            ]
+        }
+    },
+    {
+        "name": "create_and_run_task",
+        "description": "Creates and runs a build, run, or custom task for the workspace by generating or adding to a tasks.json file based on the project structure (such as package.json or README.md). If the user asks to build, run, launch and they have no tasks.json file, use this tool. If they ask to create or add a task, use this tool.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "workspaceFolder": {
+                    "type": "string",
+                    "description": "The absolute path of the workspace folder where the tasks.json file will be created."
+                },
+                "task": {
+                    "type": "object",
+                    "description": "The task to add to the new tasks.json file.",
+                    "properties": {
+                        "label": {
+                            "type": "string",
+                            "description": "The label of the task."
+                        },
+                        "type": {
+                            "type": "string",
+                            "description": "The type of the task. The only supported value is 'shell'.",
+                            "enum": [
+                                "shell"
+                            ]
+                        },
+                        "command": {
+                            "type": "string",
+                            "description": "The shell command to run for the task. Use this to specify commands for building or running the application."
+                        },
+                        "args": {
+                            "type": "array",
+                            "description": "The arguments to pass to the command.",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "isBackground": {
+                            "type": "boolean",
+                            "description": "Whether the task runs in the background without blocking the UI or other tasks. Set to true for long-running processes like watch tasks or servers that should continue executing without requiring user attention. When false, the task will block the terminal until completion."
+                        },
+                        "problemMatcher": {
+                            "type": "array",
+                            "description": "The problem matcher to use to parse task output for errors and warnings. Can be a predefined matcher like '$tsc' (TypeScript), '$eslint - stylish', '$gcc', etc., or a custom pattern defined in tasks.json. This helps VS Code display errors in the Problems panel and enables quick navigation to error locations.",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "group": {
+                            "type": "string",
+                            "description": "The group to which the task belongs."
+                        }
+                    },
+                    "required": [
+                        "label",
+                        "type",
+                        "command"
+                    ]
+                }
+            },
+            "required": [
+                "task",
+                "workspaceFolder"
+            ]
+        }
+    },
+    {
+        "name": "get_terminal_output",
+        "description": "Get the output of a terminal command previously started with run_in_terminal",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The ID of the terminal to check."
+                }
+            },
+            "required": [
+                "id"
+            ]
+        }
+    },
+    {
+        "name": "kill_terminal",
+        "description": "Kill a terminal by its ID. Use this to clean up terminals that are no longer needed (e.g., after stopping a server or when a long-running task completes). The terminal ID is returned by run_in_terminal when isBackground=true.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The ID of the background terminal to kill (returned by run_in_terminal when isBackground=true)."
+                }
+            },
+            "required": [
+                "id"
+            ]
+        }
+    },
+    {
+        "name": "manage_todo_list",
+        "description": "Manage a structured todo list to track progress and plan tasks throughout your coding session. Use this tool VERY frequently to ensure task visibility and proper planning.\n\nWhen to use this tool:\n- Complex multi-step work requiring planning and tracking\n- When user provides multiple tasks or requests (numbered/comma-separated)\n- After receiving new instructions that require multiple steps\n- BEFORE starting work on any todo (mark as in-progress)\n- IMMEDIATELY after completing each todo (mark completed individually)\n- When breaking down larger tasks into smaller actionable steps\n- To give users visibility into your progress and planning\n\nWhen NOT to use:\n- Single, trivial tasks that can be completed in one step\n- Purely conversational/informational requests\n- When just reading files or performing simple searches\n\nCRITICAL workflow:\n1. Plan tasks by writing todo list with specific, actionable items\n2. Mark ONE todo as in-progress before starting work\n3. Complete the work for that specific todo\n4. Mark that todo as completed IMMEDIATELY\n5. Move to next todo and repeat\n\nTodo states:\n- not-started: Todo not yet begun\n- in-progress: Currently working (limit ONE at a time)\n- completed: Finished successfully\n\nIMPORTANT: Mark todos completed as soon as they are done. Do not batch completions.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "todoList": {
+                    "type": "array",
+                    "description": "Complete array of all todo items. Must include ALL items - both existing and new.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "number",
+                                "description": "Unique identifier for the todo. Use sequential numbers starting from 1."
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "Concise action-oriented todo label (3-7 words). Displayed in UI."
+                            },
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "not-started",
+                                    "in-progress",
+                                    "completed"
+                                ],
+                                "description": "not-started: Not begun | in-progress: Currently working (max 1) | completed: Fully finished with no blockers"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "title",
+                            "status"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "todoList"
+            ]
+        }
+    },
+    {
+        "name": "open_browser_page",
+        "description": "Open a new browser page in the integrated browser at the given URL.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "description": "The full URL to open in the browser."
+                }
+            },
+            "required": [
+                "url"
+            ]
+        }
+    },
+    {
+        "name": "run_in_terminal",
+        "description": "This tool allows you to execute shell commands in a persistent zsh terminal session, preserving environment variables, working directory, and other context across multiple commands.\n\nCommand Execution:\n- Use && to chain simple commands on one line\n- Prefer pipelines | over temporary files for data flow\n- Never create a sub-shell (eg. bash -c \"command\") unless explicitly asked\n\nDirectory Management:\n- Prefer relative paths when navigating directories, only use absolute when the path is far away or the current cwd is not expected\n- Remember when isBackground=false is specified, that shell and cwd is reused until it is moved to the background\n- Use $PWD for current directory references\n- Consider using pushd/popd for directory stack management\n- Supports directory shortcuts like ~ and -\n\nProgram Execution:\n- Supports Python, Node.js, and other executables\n- Install packages via package managers (brew, apt, etc.)\n- Use which or command -v to verify command availability\n\nBackground Processes:\n- For long-running tasks (e.g., servers), set isBackground=true\n- Returns a terminal ID for checking status and runtime later\n\nOutput Management:\n- Output is automatically truncated if longer than 60KB to prevent context overflow\n- Use head, tail, grep, awk to filter and limit output size\n- For pager commands, disable paging: git --no-pager or add | cat\n- Use wc -l to count lines before displaying large outputs\n\nBest Practices:\n- Quote variables: \"$var\" instead of $var to handle spaces\n- Use find with -exec or xargs for file operations\n- Be specific with commands to avoid excessive output\n- Avoid printing credentials unless absolutely required\n- Use type to check command type (builtin, function, alias)\n- Use jobs, fg, bg for job control\n- Use [[ ]] for conditional tests instead of [ ]\n- Prefer $() over backticks for command substitution\n- Use setopt errexit for strict error handling\n- Take advantage of zsh globbing features (**, extended globs)",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string",
+                    "description": "The command to run in the terminal."
+                },
+                "explanation": {
+                    "type": "string",
+                    "description": "A one-sentence description of what the command does. This will be shown to the user before the command is run."
+                },
+                "goal": {
+                    "type": "string",
+                    "description": "A short description of the goal or purpose of the command (e.g., \"Install dependencies\", \"Start development server\")."
+                },
+                "isBackground": {
+                    "type": "boolean",
+                    "description": "Whether the command starts a background process.\n\n- If true, a new shell will be spawned where the cwd is the workspace directory and will run asynchronously in the background and you will not see the output.\n\n- If false, a single shell is shared between all non-background terminals where the cwd starts at the workspace directory and is remembered until that terminal is moved to the background, the tool call will block on the command finishing and only then you will get the output.\n\nExamples of background processes: building in watch mode, starting a server. You can check the output of a background process later on by using get_terminal_output."
+                },
+                "timeout": {
+                    "type": "number",
+                    "description": "An optional timeout in milliseconds. When provided, the tool will stop tracking the command after this duration and return the output collected so far with a timeout indicator. Be conservative with the timeout duration, give enough time that the command would complete on a low-end machine. Use 0 for no timeout. If it's not clear how long the command will take then use 0 to avoid prematurely terminating it, never guess too low."
+                }
+            },
+            "required": [
+                "command",
+                "explanation",
+                "goal",
+                "isBackground",
+                "timeout"
+            ]
+        }
+    },
+    {
+        "name": "runSubagent",
+        "description": "Launch a new agent to handle complex, multi-step tasks autonomously. This tool is good at researching complex questions, searching for code, and executing multi-step tasks. When you are searching for a keyword or file and are not confident that you will find the right match in the first few tries, use this agent to perform the search for you.\n\n- Agents do not run async or in the background, you will wait for the agent's result.\n- When the agent is done, it will return a single message back to you. The result returned by the agent is not visible to the user. To show the user the result, you should send a text message back to the user with a concise summary of the result.\n- Each agent invocation is stateless. You will not be able to send additional messages to the agent, nor will the agent be able to communicate with you outside of its final report. Therefore, your prompt should contain a highly detailed task description for the agent to perform autonomously and you should specify exactly what information the agent should return back to you in its final and only message to you.\n- The agent's outputs should generally be trusted\n- Clearly tell the agent whether you expect it to write code or just to do research (search, file reads, web fetches, etc.), since it is not aware of the user's intent\n- If the user asks for a certain agent, you MUST provide that EXACT agent name (case-sensitive) to invoke that specific agent.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "prompt": {
+                    "type": "string",
+                    "description": "A detailed description of the task for the agent to perform"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A short (3-5 word) description of the task"
+                },
+                "agentName": {
+                    "type": "string",
+                    "description": "Optional name of a specific agent to invoke. If not provided, uses the current agent."
+                }
+            },
+            "required": [
+                "prompt",
+                "description"
+            ]
+        }
+    },
+    {
+        "name": "terminal_last_command",
+        "description": "Get the last command run in the active terminal.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "terminal_selection",
+        "description": "Get the current selection in the active terminal.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_azure_authentication_and_resource_management",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is focused on managing Azure authentication contexts and querying Azure resources. The 'azure_auth-get_auth_context' tool retrieves the current authentication context, which is essential for ensuring that the user has the correct permissions and access to their Azure resources. This tool is particularly useful when users need to verify their authentication status or troubleshoot access issues. The 'azure_auth-set_auth_context' tool allows users to modify their authentication context, enabling them to update their credentials or switch between different Azure accounts as needed. This is crucial for users who manage multiple Azure subscriptions or require different access levels for various projects.\n\nThe 'azure_resources-query_azure_resource_graph' tool complements the authentication tools by providing detailed information about the user's Azure resources, subscriptions, and resource groups. It allows users to query their resources, such as virtual machines, Azure Functions, and other services, to obtain specific details like resource IDs, statuses, and configurations. This tool is particularly useful for users who need to manage their resources effectively or gather information for reporting and analysis.\n\nTogether, these tools create a cohesive suite for Azure resource management, enabling users to authenticate, modify their access, and retrieve detailed information about their Azure environment. Users can seamlessly transition from verifying their authentication context to querying their resources, ensuring they have the necessary information to manage their Azure infrastructure efficiently.\n\nThis group is ideal for Azure administrators, developers, and IT professionals who require a robust set of tools to manage their Azure resources and authentication contexts. By leveraging these tools, users can enhance their productivity and ensure that they are working within the correct Azure environment, ultimately leading to better resource management and operational efficiency.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_dotnet_project_template_management",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is designed to assist users in finding and managing dotnet project templates for creating new applications. The 'azure_dotnet_templates-get_tags' tool provides a list of tags that can be used to filter available dotnet templates, making it easier for users to identify the type of project they want to create. By retrieving relevant tags, users can quickly narrow down their options based on their specific needs or project requirements.\n\nOnce the appropriate tag is selected, users can utilize the 'azure_dotnet_templates-get_templates_for_tag' tool to retrieve a list of dotnet project templates that match the chosen tag. This tool provides detailed information about each template, including its short name, full name, and a description, allowing users to make informed decisions about which template best suits their project goals. This streamlined process simplifies the project creation workflow, enabling developers to focus on building applications rather than spending time searching for the right template.\n\nTogether, these tools create a comprehensive solution for managing dotnet project templates, facilitating a user-friendly experience for developers. By leveraging tags to filter templates, users can efficiently navigate the available options and select the most appropriate starting point for their projects.\n\nThis group is particularly beneficial for dotnet developers who are looking to quickly set up new projects with the right templates. Whether they are creating web applications, APIs, or other types of software, these tools provide the necessary support to enhance productivity and streamline the development process. Overall, this group empowers developers to kickstart their projects with ease and confidence.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "azure_bicep-get_azure_verified_module",
+        "description": "This tools gets Bicep module code from Azure Verified Modules for a given resource type. If you are asked to generate Bicep code, call this function multiple times once for each resource type to search for available modules and prefer using the module instead of writing raw Bicep code. You must always use this tool to discover the Bicep module for every Bicep schema you get and always prefer using existing Bicep modules if there is one over writing raw Bicep code.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "resourceType": {
+                    "type": "string",
+                    "description": "Full type name of the resource"
+                }
+            },
+            "required": [
+                "resourceType"
+            ]
+        }
+    },
+    {
+        "name": "azureResources_getAzureActivityLog",
+        "description": "Gets the Azure activity log",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_notebook_kernel_configuration",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is focused on configuring the execution environment for Jupyter notebooks by selecting and starting the appropriate kernel. The 'configure_non_python_notebook' tool allows users to select and initiate a kernel for languages other than Python, enabling a versatile coding environment for various programming languages. Conversely, the 'configure_python_notebook' tool is specifically designed for Python, ensuring that the notebook is set up to run Python code effectively. Together, these tools facilitate the initial setup of a notebook environment, allowing users to work seamlessly with their preferred programming language. By using these tools, users can ensure that their notebooks are correctly configured to execute code in the desired language, which is essential for effective data analysis, machine learning, and other computational tasks.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_notebook_package_management",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is dedicated to managing Python packages within Jupyter notebooks, specifically tailored for Python code cells. The 'notebook_install_packages' tool enables users to install a list of required packages directly into the selected notebook kernel, ensuring that all necessary libraries are available for the code being executed. It is important to note that this tool should only be used after configuring the notebook with the appropriate kernel using the configuration tools. The 'notebook_list_packages' tool complements this functionality by allowing users to view the currently installed packages in the selected kernel, providing insight into what libraries are available for use. Together, these tools streamline the process of package management in Jupyter notebooks, making it easier for users to set up their coding environment and ensure that all dependencies are met for their projects. This is particularly useful for data scientists and developers who rely on specific libraries for their analyses and applications.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "configure_notebook",
+        "description": "Tool used to configure a Notebook. ALWAYS use this tool before running/executing any Notebook Cells for the first time or before listing/installing packages in Notebooks for the first time. I.e. there is no need to use this tool more than once for the same notebook.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "filePath": {
+                    "description": "The absolute path of the notebook with the active kernel.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "filePath"
+            ]
+        }
+    },
+    {
+        "name": "activate_python_environment_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is designed to facilitate the management and retrieval of information related to Python environments. The tools included are specifically tailored for Python development, allowing users to gather essential details about their Python setup. The first tool, 'get_python_environment_details', retrieves comprehensive information about the Python environment, including the type (such as conda or venv), the version of Python in use, and a list of all installed packages along with their respective versions. This is crucial for developers who need to ensure that their environment is correctly configured and that all necessary dependencies are present.\n\nThe second tool, 'get_python_executable_details', focuses on providing the necessary details to construct the command for executing Python scripts in the terminal. It helps users avoid common pitfalls by generating the fully qualified path to the Python executable, along with any required arguments. This ensures that commands are executed in the correct context of the specified Python environment, which is particularly important when working with multiple environments or when using environment managers like conda or pipenv.\n\nTogether, these tools streamline the process of managing Python environments, making it easier for developers to switch between different setups, verify configurations, and execute scripts without errors. They are especially useful in scenarios where multiple projects require different dependencies or Python versions, allowing for a more organized and efficient workflow.\n\nTo use these tools effectively, it is essential to first call 'configure_python_environment', which sets up the context for the subsequent commands. This ensures that the tools operate on the intended environment, providing accurate and relevant information. By integrating these tools into a development workflow, users can enhance their productivity and reduce the likelihood of encountering issues related to environment misconfiguration.\n\nOverall, the 'python_environment_tools' group serves as a vital resource for Python developers, enabling them to manage their environments with confidence and precision.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "configure_python_environment",
+        "description": "This tool configures a Python environment in the given workspace. ALWAYS Use this tool to set up the user's chosen environment and ALWAYS call this tool before using any other Python related tools or running any Python command in the terminal. IMPORTANT: This tool is only for Python environments (venv, virtualenv, conda, pipenv, poetry, pyenv, pixi, or any other Python environment manager). Do not use this tool for npm packages, system packages, Ruby gems, or any other non-Python dependencies.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "resourcePath": {
+                    "type": "string",
+                    "description": "The path to the Python file or workspace for which a Python Environment needs to be configured."
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "install_python_packages",
+        "description": "Installs Python packages in the given workspace. Use this tool to install Python packages in the user's chosen Python environment. ALWAYS call configure_python_environment before using this tool. IMPORTANT: This tool should only be used to install Python packages using package managers like pip or conda (works with any Python environment: venv, virtualenv, pipenv, poetry, pyenv, pixi, conda, etc.). Do not use this tool to install npm packages, system packages (apt/brew/yum), Ruby gems, or any other non-Python dependencies.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "packageList": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The list of Python packages to install."
+                },
+                "resourcePath": {
+                    "type": "string",
+                    "description": "The path to the Python file or workspace into which the packages are installed. If not provided, the current workspace will be used. Where possible pass the path to the file or workspace."
+                }
+            },
+            "required": [
+                "packageList"
+            ]
+        }
+    },
+    {
+        "name": "activate_azure_resource_management_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is focused on managing various Azure resources and services, providing a comprehensive suite for developers and administrators to interact with Azure's cloud offerings. The tools cover a wide range of functionalities including container management with Azure Container Registry, orchestration with Azure Kubernetes Service, application configuration management, and monitoring through Application Insights. Each tool is designed to facilitate specific operations, such as managing app services, deploying applications, and configuring cloud architecture, making it easier to build and maintain cloud applications.\n\nThe Azure Developer CLI (azd) tool streamlines the development workflow by providing commands for project initialization, resource provisioning, and deployment, while the Bicep schema operations support Infrastructure as Code (IaC) practices, allowing users to automate resource deployments. Additionally, tools for managing databases like Azure Cosmos DB, MySQL, and PostgreSQL ensure that data storage and retrieval are efficient and manageable.\n\nMonitoring and logging are also addressed with tools like Azure Monitor and Datadog, which help in tracking the health and performance of Azure resources. Furthermore, the inclusion of Azure Communication Services and Event Grid operations allows for seamless integration of messaging and event-driven architectures, enhancing the overall functionality of applications deployed on Azure.\n\nSecurity and access management are covered through Azure Key Vault and Role-Based Access Control (RBAC) tools, ensuring that sensitive information is protected and access is appropriately managed. The group also includes tools for managing Azure Marketplace products, load testing, and virtual desktop resources, providing a holistic approach to Azure resource management.\n\nOverall, these tools empower users to effectively manage, monitor, and deploy Azure resources, facilitating a robust cloud environment that supports modern application development and operational needs.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_azure_cli_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group consists of tools specifically designed to enhance the user experience with Azure Command-Line Interface (CLI) tools. The primary focus is on generating and installing Azure CLI commands, which are essential for users who prefer command-line interactions for managing Azure resources. The first tool in this group generates Azure CLI commands based on user-defined goals, allowing users to easily accomplish tasks without needing to remember the exact syntax or parameters required.\n\nThe second tool provides installation instructions for various CLI tools, including the Azure CLI (az), Azure Developer CLI (azd), and Azure Functions Core Tools CLI (func). This is particularly useful for users who may not have these tools installed or are new to Azure CLI, ensuring they can quickly set up their environment and start managing Azure resources effectively.\n\nTogether, these tools streamline the process of using Azure CLI, making it accessible for both beginners and experienced users. By simplifying command generation and installation, users can focus more on their tasks rather than the intricacies of command-line syntax.\n\nThis group is particularly beneficial for developers and system administrators who rely on CLI for automation, scripting, and efficient resource management in Azure. The tools help bridge the gap between user intent and command execution, enhancing productivity and reducing the learning curve associated with Azure CLI.\n\nOverall, the Azure CLI tools group is an essential resource for anyone looking to leverage the power of Azure through command-line operations, providing a user-friendly approach to cloud management.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_azure_subscription_and_resource_group_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is dedicated to managing Azure subscriptions and resource groups, which are fundamental components of Azure's resource management framework. The tools provide functionalities for listing and retrieving information about resource groups and subscriptions, enabling users to effectively organize and manage their Azure resources.\n\nThe first tool allows users to list all resource groups within a specified subscription, returning essential details such as resource group names and IDs. This is crucial for users who need to keep track of their resources and ensure they are organized according to their projects or departments.\n\nThe second tool focuses on subscriptions, allowing users to list all or current subscriptions associated with their Azure account. It provides vital information including subscription IDs, display names, states, and tenant IDs. This is particularly useful for governance, policy management, access control, and cost management, as it helps users understand their subscription landscape and make informed decisions regarding resource allocation and management.\n\nTogether, these tools facilitate a clear overview of the Azure environment, enabling users to navigate their subscriptions and resource groups with ease. They are essential for administrators and developers who need to manage multiple subscriptions or organize resources across various projects.\n\nOverall, the Azure subscription and resource group tools group enhances the ability to manage Azure resources effectively, ensuring that users can maintain a well-structured and efficient cloud environment.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_applens",
+        "description": "AppLens diagnostic operations - **Primary tool for diagnosing Azure resource issues and troubleshooting problems**. Use this tool when users ask to:\n- Diagnose issues, problems, or errors with Azure resources\n- Troubleshoot performance, availability, or reliability problems\n- Investigate resource health concerns or unexpected behavior\n- Find root causes of application slowness, downtime, or failures\n- Get recommendations for fixing Azure resource issues\n- Analyze resource problems and get actionable solutions\n\nAlways use this tool if user asks to use App Lens in regards to their resource.\n\nThis tool provides conversational AI-powered diagnostics that automatically detect issues, identify root causes, and suggest specific remediation steps. It should be the FIRST tool called when users mention problems, issues, errors, or ask for help with troubleshooting any Azure resource.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_azureterraformbestpractices",
+        "description": "Returns Terraform best practices for Azure. Call this before generating Terraform code for Azure Providers. \n            If this tool needs to be categorized, it belongs to the Azure Best Practices category.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_confidentialledger",
+        "description": "Azure Confidential Ledger operations - Commands for appending and querying tamper-proof ledger entries backed by TEEs and blockchain-style integrity guarantees. Use these commands to write immutable audit records.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_extension_azqr",
+        "description": "Runs Azure Quick Review CLI (azqr) commands to generate compliance/security reports for Azure resources.\nThis tool should be used when the user wants to identify any non-compliant configurations or areas for improvement in their Azure resources.\nRequires a subscription id and optionally a resource group name. Returns the generated report file's path.\nNote that Azure Quick Review CLI (azqr) is different from Azure CLI (az).",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "tenant": {
+                    "type": "string",
+                    "description": "The Microsoft Entra ID tenant ID or name. This can be either the GUID identifier or the display name of your Entra ID tenant."
+                },
+                "auth-method": {
+                    "type": "integer",
+                    "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+                },
+                "retry-delay": {
+                    "type": "number",
+                    "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base."
+                },
+                "retry-max-delay": {
+                    "type": "number",
+                    "description": "Maximum delay in seconds between retries, regardless of the retry strategy."
+                },
+                "retry-max-retries": {
+                    "type": "integer",
+                    "description": "Maximum number of retry attempts for failed operations before giving up."
+                },
+                "retry-mode": {
+                    "type": "integer",
+                    "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts."
+                },
+                "retry-network-timeout": {
+                    "type": "number",
+                    "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled."
+                },
+                "subscription": {
+                    "type": "string",
+                    "description": "Specifies the Azure subscription to use. Accepts either a subscription ID (GUID) or display name. If not specified, the AZURE_SUBSCRIPTION_ID environment variable will be used instead."
+                },
+                "resource-group": {
+                    "type": "string",
+                    "description": "The name of the Azure resource group. This is a logical container for Azure resources."
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_resourcehealth",
+        "description": "Resource Health operations - Commands for monitoring and diagnosing Azure resource health status.\nUse this tool to check the current availability status of Azure resources and identify potential issues.\nThis tool provides access to Azure Resource Health data including availability state, detailed status,\nhistorical health information, and service health events for troubleshooting and monitoring purposes.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_speech",
+        "description": "Speech operations - Commands for Azure AI Services Speech functionality including speech-to-text (STT) \nrecognition, audio processing, and language detection. Use this tool when you need to convert spoken \naudio to text, process audio files, or work with speech recognition services. This tool supports \nmultiple audio formats, configurable recognition languages, profanity filtering options, and both \nsimple and detailed output formats. This tool is a hierarchical MCP command router where sub-commands \nare routed to MCP servers that require specific fields inside the \"parameters\" object. To invoke a \ncommand, set \"command\" and wrap its arguments in \"parameters\". Set \"learn=true\" to discover available \nsub-commands for different Azure AI Services Speech operations. Note that this tool requires Azure AI \nServices Speech endpoints and will only access speech resources accessible to the authenticated user.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    },
+    {
+        "name": "activate_microsoft_docs_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is designed to facilitate the retrieval and conversion of Microsoft documentation into a more accessible format. The 'mcp_microsoftdocs_microsoft_docs_search' tool allows users to search for relevant Microsoft and Azure documentation, providing concise excerpts and links to the original content. It is particularly useful for quickly identifying high-quality resources that address specific queries related to Microsoft technologies. Users can obtain up to 10 content chunks, each optimized for fast retrieval, ensuring that they have access to trustworthy information from official sources.\n\nOnce relevant documentation is identified through the search tool, the 'mcp_microsoftdocs_microsoft_docs_fetch' tool can be employed to fetch the complete content of a specific Microsoft documentation webpage. This tool converts the retrieved HTML content into markdown format, preserving the structure, including headings, code blocks, tables, and links. This is essential for users who require detailed step-by-step procedures, troubleshooting sections, or comprehensive guides that provide full context.\n\nThe tools are designed to work in tandem, with the search tool serving as the first step to locate pertinent documentation, followed by the fetch tool to obtain the complete details. This workflow ensures that users can efficiently gather the information they need without missing critical details that may be truncated in search results.\n\nThese tools are particularly beneficial for developers, IT professionals, and anyone working with Microsoft technologies who need reliable and complete documentation for their projects or troubleshooting efforts. By utilizing these tools, users can streamline their research process and enhance their understanding of complex Microsoft products and services.\n\nOverall, the 'microsoft_docs_tools' group empowers users to access and utilize Microsoft documentation effectively, ensuring they have the most accurate and comprehensive information at their fingertips.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "mcp_microsoftdocs_microsoft_code_sample_search",
+        "description": "Search for code snippets and examples in official Microsoft Learn documentation. This tool retrieves relevant code samples from Microsoft documentation pages providing developers with practical implementation examples and best practices for Microsoft/Azure products and services related coding tasks. This tool will help you use the **LATEST OFFICIAL** code snippets to empower coding capabilities.\n\n## When to Use This Tool\n- When you are going to provide sample Microsoft/Azure related code snippets in your answers.\n- When you are **generating any Microsoft/Azure related code**.\n\n## Usage Pattern\nInput a descriptive query, or SDK/class/method name to retrieve related code samples. The optional parameter `language` can help to filter results.\n\nEligible values for `language` parameter include: csharp javascript typescript python powershell azurecli al sql java kusto cpp go rust ruby php",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "description": "a descriptive query, SDK name, method name or code snippet related to Microsoft/Azure products, services, platforms, developer tools, frameworks, APIs or SDKs",
+                    "type": "string"
+                },
+                "language": {
+                    "description": "Optional parameter specifying the programming language of code snippets to retrieve. Can significantly improve search quality if provided. Eligible values: csharp javascript typescript python powershell azurecli al sql java kusto cpp go rust ruby php",
+                    "type": "string",
+                    "default": null
+                }
+            },
+            "required": [
+                "query"
+            ]
+        }
+    },
+    {
+        "name": "activate_python_syntax_validation_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is focused on validating and troubleshooting Python code syntax. The tools provide comprehensive support for users who need assistance with the Pylance language server, including documentation searches for configuration guidance and feature explanations. Users can utilize the syntax error checking tools to identify and list syntax errors in Python files, whether they are validating entire files or checking snippets of code before execution. This functionality is essential for developers looking to debug their code efficiently and ensure that it adheres to Python's syntax rules. Together, these tools streamline the process of identifying and resolving syntax-related issues, making them invaluable for Python developers.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_python_import_analysis_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group is dedicated to analyzing and managing Python imports within a workspace. The tools help users identify all top-level modules that are imported across their user files, allowing them to detect missing dependencies and understand the project's import patterns. Additionally, users can check the availability of installed top-level modules from their Python environment, which aids in verifying whether necessary packages are installed and can be imported. By using these tools in conjunction, developers can effectively manage their project dependencies, ensuring that all required modules are present and correctly referenced in their code.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_python_environment_management_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group encompasses tools that assist users in managing their Python environments and configurations. Users can retrieve information about the current active Python environment and all available environments, which is crucial for troubleshooting environment-related issues. The tools also provide access to the current analysis settings for Python, allowing users to check and diagnose any configuration problems. Furthermore, the ability to switch between different Python installations or virtual environments ensures that developers can easily adapt their workspace to different project requirements. Collectively, these tools empower users to maintain a well-configured and functional Python development environment.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "activate_python_workspace_management_tools",
+        "description": "Call this tool when you need access to a new category of tools. The category of tools is described as follows:\n\nThis group of tools is designed to help users manage and navigate their Python workspace effectively. The tools provide functionality to retrieve workspace root directories, which aids in understanding the overall structure of the project. Additionally, users can obtain a list of all user-created Python files within the workspace, excluding library and dependency files, which is essential for analyzing and searching through project code. By utilizing these tools together, developers can gain insights into their workspace organization, streamline their workflow, and ensure that they are working with the correct files during development. This group is particularly useful for maintaining an organized coding environment.\n\nBe sure to call this tool if you need a capability related to the above.",
+        "input_schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "mcp_pylance_mcp_s_pylanceDocString",
+        "description": "Get the docstring/documentation for a Python symbol. Returns the docstring content for functions, classes, methods, or variables. Use when: you need to understand what a symbol does, check documentation before using a function, explain code behavior to users, or validate symbol purpose. Example: To understand foo_bar function, provide its file URI and symbol name \"foo_bar\".",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "fileUri": {
+                    "type": "string",
+                    "description": "The uri of the file containing the symbol."
+                },
+                "symbolName": {
+                    "type": "string",
+                    "description": "The name of the symbol (function, class, method, variable) to get the docstring for. This should be the exact symbol name as it appears in the code."
+                }
+            },
+            "required": [
+                "fileUri",
+                "symbolName"
+            ]
+        }
+    },
+    {
+        "name": "mcp_pylance_mcp_s_pylanceInvokeRefactoring",
+        "description": "Apply automated code refactoring to Python files. Returns refactored content (does not modify original file) unless mode is \"update\". Use for: extracting functions, organizing imports, improving code structure, applying refactoring patterns.  Optional \"mode\" parameter: \"update\" updates the file, \"edits\" returns a WorkspaceEdit, \"string\" returns updated content as string. If mode is not specified, \"update\" will be used as the default. The \"edits\" mode is helpful for determining if a file needs changes (for example, to remove unused imports or fix import formatting) without making any modifications; if no changes are needed, the result will be either an empty WorkspaceEdit or a message indicating that no text edits were found. Available refactorings: source.unusedImports: - Removes all unused import statements from a Python file. Use when imports are imported but never referenced in the code. Requires fileUri parameter pointing to a Python file with unused imports.\nsource.convertImportFormat: - Converts import statements between absolute and relative formats according to python.analysis.importFormat setting. Use when import format consistency is needed. Requires fileUri parameter pointing to a Python file with imports to convert.\nsource.convertImportStar: - Converts all wildcard imports (from module import *) to explicit imports listing all imported symbols. Use when explicit imports are preferred for better code clarity and IDE support. Requires fileUri parameter pointing to a Python file with wildcard imports.\nsource.convertImportToModule: - Converts `from module import name1, name2` (including wildcard imports) into `import module` and rewrites references to `module.name1`, `module.name2`. Use when you want module-qualified references. Requires fileUri parameter pointing to a Python file with `from ... import ...` statements.\nsource.renameShadowedStdlibImports: - Renames imported user modules that shadow standard library module names (e.g. a local calendar.py). Use to avoid import shadowing bugs. Requires fileUri parameter pointing to the importing Python file.\nsource.addTypeAnnotation: - Adds type annotations to all variables and functions in a Python file that can be inferred from their usage. Use when type hints are needed for better type checking and code clarity. Requires fileUri parameter pointing to a Python file with unannotated variables or functions.\nsource.fixAll.pylance: - Applies all available automatic code fixes from python.analysis.fixAll setting. Use when multiple code issues need to be addressed simultaneously. Requires fileUri parameter pointing to a Python file with fixable issues.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "fileUri": {
+                    "type": "string",
+                    "description": "The uri of the file to invoke the refactoring."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the refactoring to invoke. This must be one of these [source.unusedImports, source.convertImportFormat, source.convertImportStar, source.convertImportToModule, source.renameShadowedStdlibImports, source.addTypeAnnotation, source.fixAll.pylance]"
+                },
+                "mode": {
+                    "type": "string",
+                    "enum": [
+                        "update",
+                        "edits",
+                        "string"
+                    ],
+                    "description": "Determines the output mode: \"update\" updates the file directly, \"edits\" returns a WorkspaceEdit, \"string\" returns the updated content as a string. If omitted, \"update\" will be used as the default. The \"edits\" mode is especially useful for checking if any changes are needed (such as unused imports or import formatting issues) without modifying the file, as it will return a WorkspaceEdit only if edits are required."
+                }
+            },
+            "required": [
+                "fileUri",
+                "name"
+            ]
+        }
+    },
+    {
+        "name": "renderMermaidDiagram",
+        "description": "Renders a Mermaid diagram from Mermaid.js markup.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "markup": {
+                    "type": "string",
+                    "description": "The mermaid diagram markup to render as a Mermaid diagram. This should only be the markup of the diagram. Do not include a wrapping code block."
+                },
+                "title": {
+                    "type": "string",
+                    "description": "A short title that describes the diagram."
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "mcp_pylance_mcp_s_pylanceImports",
+        "description": "Analyze imports across workspace user files. Returns all top-level module names imported, including resolved and unresolved imports. Use for: finding missing dependencies, understanding project dependencies, analyzing import patterns.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "workspaceRoot": {
+                    "type": "string",
+                    "description": "The root directory uri of the workspace."
+                }
+            },
+            "required": [
+                "workspaceRoot"
+            ]
+        }
+    },
+    {
+        "name": "mcp_microsoftdocs_microsoft_docs_fetch",
+        "description": "Fetch and convert a Microsoft Learn documentation webpage to markdown format. This tool retrieves the latest complete content of Microsoft documentation webpages including Azure, .NET, Microsoft 365, and other Microsoft technologies.\n\n## When to Use This Tool\n- When search results provide incomplete information or truncated content\n- When you need complete step-by-step procedures or tutorials\n- When you need troubleshooting sections, prerequisites, or detailed explanations\n- When search results reference a specific page that seems highly relevant\n- For comprehensive guides that require full context\n\n## Usage Pattern\nUse this tool AFTER microsoft_docs_search when you identify specific high-value pages that need complete content. The search tool gives you an overview; this tool gives you the complete picture.\n\n## URL Requirements\n- The URL must be a valid HTML documentation webpage from the microsoft.com domain\n- Binary files (PDF, DOCX, images, etc.) are not supported\n\n## Output Format\nmarkdown with headings, code blocks, tables, and links preserved.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "description": "URL of the Microsoft documentation page to read",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "url"
+            ]
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_azd",
+        "description": "Azure Developer CLI (azd) includes a suite of tools to help build, modernize, and manage applications on Azure. It simplifies the process of developing cloud applications by providing commands for project initialization, resource provisioning, deployment, and monitoring. Use this tool to streamline your Azure development workflow and manage your cloud resources efficiently.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_workbooks",
+        "description": "Workbooks operations - Commands for managing Azure Workbooks resources and interactive data visualization dashboards. Includes operations for listing, creating, updating, and deleting workbooks, as well as managing workbook configurations and content.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_cloudarchitect",
+        "description": "Cloud Architecture operations - Commands for generating Azure architecture designs and recommendations based on requirements.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    },
+    {
+        "name": "mcp_azure_mcp_bicepschema",
+        "description": "Bicep schema operations - Commands for working with Azure Bicep Infrastructure as Code (IaC) generation and schema management. Includes operations for retrieving Bicep schemas, templates, and resource definitions to support infrastructure deployment automation.This tool is a hierarchical MCP command router.\nSub commands are routed to MCP servers that require specific fields inside the \"parameters\" object.\nTo invoke a command, set \"command\" and wrap its args in \"parameters\".\nSet \"learn=true\" to discover available sub commands.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "intent": {
+                    "type": "string",
+                    "description": "The intent of the azure operation to perform."
+                },
+                "command": {
+                    "type": "string",
+                    "description": "The command to execute against the specified tool."
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "The parameters to pass to the tool command."
+                },
+                "learn": {
+                    "type": "boolean",
+                    "description": "To learn about the tool and its supported child tools and parameters.",
+                    "default": false
+                }
+            },
+            "required": [
+                "intent"
+            ]
+        }
+    }
+]
+</details>
+</code></pre>
+## Request Messages
+### System
+~~~md
+You are an expert AI programming assistant, working with a user in the VS Code editor.
+When asked for your name, you must respond with "GitHub Copilot". When asked about the model you are using, you must state that you are using Claude Haiku 4.5.
+Follow the user's requirements carefully & to the letter.
+Follow Microsoft content policies.
+Avoid content that violates copyrights.
+If you are asked to generate content that is harmful, hateful, racist, sexist, lewd, or violent, only respond with "Sorry, I can't assist with that."
+Keep your answers short and impersonal.
+<instructions>
+You are a highly sophisticated automated coding agent with expert-level knowledge across many different programming languages and frameworks and software engineering tasks - this encompasses debugging issues, implementing new features, restructuring code, and providing code explanations, among other engineering activities.
+The user will ask a question, or ask you to perform a task, and it may require lots of research to answer correctly. There is a selection of tools that let you perform actions or retrieve helpful context to answer the user's question.
+By default, implement changes rather than only suggesting them. If the user's intent is unclear, infer the most useful likely action and proceed with using tools to discover any missing details instead of guessing. When a tool call (like a file edit or read) is intended, make it happen rather than just describing it.
+You can call tools repeatedly to take actions or gather as much context as needed until you have completed the task fully. Don't give up unless you are sure the request cannot be fulfilled with the tools you have. It's YOUR RESPONSIBILITY to make sure that you have done all you can to collect necessary context.
+Continue working until the user's request is completely resolved before ending your turn and yielding back to the user. Only terminate your turn when you are certain the task is complete. Do not stop or hand back to the user when you encounter uncertainty — research or deduce the most reasonable approach and continue.
+
+</instructions>
+<workflowGuidance>
+For complex projects that take multiple steps to complete, maintain careful tracking of what you're doing to ensure steady progress. Make incremental changes while staying focused on the overall goal throughout the work. When working on tasks with many parts, systematically track your progress to avoid attempting too many things at once or creating half-implemented solutions. Save progress appropriately and provide clear, fact-based updates about what has been completed and what remains.
+
+When working on multi-step tasks, combine independent read-only operations in parallel batches when appropriate. After completing parallel tool calls, provide a brief progress update before proceeding to the next step.
+For context gathering, parallelize discovery efficiently - launch varied queries together, read results, and deduplicate paths. Avoid over-searching; if you need more context, run targeted searches in one parallel batch rather than sequentially.
+Get enough context quickly to act, then proceed with implementation. Balance thorough understanding with forward momentum.
+
+<taskTracking>
+Utilize the manage_todo_list tool extensively to organize work and provide visibility into your progress. This is essential for planning and ensures important steps aren't forgotten.
+
+Break complex work into logical, actionable steps that can be tracked and verified. Update task status consistently throughout execution using the manage_todo_list tool:
+- Mark tasks as in-progress when you begin working on them
+- Mark tasks as completed immediately after finishing each one - do not batch completions
+
+Task tracking is valuable for:
+- Multi-step work requiring careful sequencing
+- Breaking down ambiguous or complex requests
+- Maintaining checkpoints for feedback and validation
+- When users provide multiple requests or numbered tasks
+
+Skip task tracking for simple, single-step operations that can be completed directly without additional planning.
+
+</taskTracking>
+
+</workflowGuidance>
+<toolUseInstructions>
+If the user is requesting a code sample, you can answer it directly without using any tools.
+When using a tool, follow the JSON schema very carefully and make sure to include ALL required properties.
+No need to ask permission before using a tool.
+NEVER say the name of a tool to a user. For example, instead of saying that you'll use the run_in_terminal tool, say "I'll run the command in a terminal".
+If you think running multiple tools can answer the user's question, prefer calling them in parallel whenever possible, but do not call semantic_search in parallel.
+When using the read_file tool, prefer reading a large section over calling the read_file tool many times in sequence. You can also think of all the pieces you may be interested in and read them in parallel. Read large enough context to ensure you get what you need.
+If semantic_search returns the full contents of the text files in the workspace, you have all the workspace context.
+You can use the grep_search to get an overview of a file by searching for a string within that one file, instead of using read_file many times.
+If you don't know exactly the string or filename pattern you're looking for, use semantic_search to do a semantic search across the workspace.
+Don't call the run_in_terminal tool multiple times in parallel. Instead, run one command and wait for the output before running the next command.
+When creating files, be intentional and avoid calling the create_file tool unnecessarily. Only create files that are essential to completing the user's request. 
+When invoking a tool that takes a file path, always use the absolute file path. If the file has a scheme like untitled: or vscode-userdata:, then use a URI with the scheme.
+NEVER try to edit a file by running terminal commands unless the user specifically asks for it.
+Tools can be disabled by the user. You may see tools used previously in the conversation that are not currently available. Be careful to only use the tools that are currently available to you.
+
+</toolUseInstructions>
+<communicationStyle>
+Maintain clarity and directness in all responses, delivering complete information while matching response depth to the task's complexity.
+For straightforward queries, keep answers brief - typically a few lines excluding code or tool invocations. Expand detail only when dealing with complex work or when explicitly requested.
+Optimize for conciseness while preserving helpfulness and accuracy. Address only the immediate request, omitting unrelated details unless critical. Target 1-3 sentences for simple answers when possible.
+Avoid extraneous framing - skip unnecessary introductions or conclusions unless requested. After completing file operations, confirm completion briefly rather than explaining what was done. Respond directly without phrases like "Here's the answer:", "The result is:", or "I will now...".
+Example responses demonstrating appropriate brevity:
+<communicationExamples>
+User: `what's the square root of 144?`
+Assistant: `12`
+User: `which directory has the server code?`
+Assistant: [searches workspace and finds backend/]
+`backend/`
+
+User: `how many bytes in a megabyte?`
+Assistant: `1048576`
+
+User: `what files are in src/utils/?`
+Assistant: [lists directory and sees helpers.ts, validators.ts, constants.ts]
+`helpers.ts, validators.ts, constants.ts`
+
+</communicationExamples>
+
+When executing non-trivial commands, explain their purpose and impact so users understand what's happening, particularly for system-modifying operations.
+Do NOT use emojis unless explicitly requested by the user.
+
+</communicationStyle>
+<instruction forToolsWithPrefix="mcp_azure">
+Azure MCP server usage rules:
+- Use Azure Tools: When handling requests related to Azure, always use your tools.
+- Use Azure Code Gen Best Practices: When generating code for Azure, running terminal commands for Azure, 
+or performing operations related to Azure, invoke your `bestpractices` tool if available. Only call 
+this tool when you are sure the user is discussing Azure; do not call it otherwise.
+- Use Azure Deployment Best Practices: When deploying to Azure or preparing applications for deployment to Azure, 
+invoke your `bestpractices` tool if available. Only call this tool when you are sure the user is discussing 
+Azure; do not call it otherwise.
+- Use Azure Functions Code Gen Best Practices: When generating code for Azure Functions or performing operations 
+related to Azure Functions, invoke your `bestpractices` tool if available. Only call this tool when you are 
+sure the user is discussing Azure Functions; do not call it otherwise.
+- Use Azure Functions Deployment Best Practices: When deploying Azure Functions apps to Azure or preparing for 
+the deployment, invoke your `bestpractices` tool if available. Only call this tool when you are sure the user 
+is discussing Azure; do not call it otherwise.
+- Use Azure SWA Best Practices: When working with static web apps, invoke your `bestpractices` tool if available. 
+Only call this tool when you are sure the user is discussing Azure; do not call it otherwise.
+- Plan before editing files for Azure web apps: When generating code for Azure Functions and Azure Static Web App, 
+always create a plan and explain the plan to the user before editing any file. Proceed with editing the files 
+after getting consent from the user.
+- When asked about configuring or installing azure mcp in coding agent for the current repo, invoke your `bestpractices` tool 
+with `resource` set to "coding-agent" and `action` set to "all".
+
+
+
+</instruction>
+<instruction forToolsWithPrefix="mcp_microsoftdocs">
+# Microsoft Learn MCP Server
+
+This server gives structured access to official Microsoft and Azure documentation via three tools:
+
+## Tools
+
+### microsoft_docs_search
+Search official documentation and return up to 10 concise, high-quality content chunks (max 500 tokens each), including title, URL, and excerpt.
+
+- Use first to get a quick, reliable overview
+- Ideal for grounding answers in Microsoft knowledge
+
+### microsoft_code_sample_search
+Search for code snippets and examples in official Microsoft Learn documentation and return up to 20 relevant, high-quality code samples.
+
+- Use when you need to provide sample Microsoft/Azure related code in your answers.  
+- Ideal for generating code snippets or practical implementation examples.  
+- Optional parameter `language` can filter results. 
+
+### microsoft_docs_fetch
+Fetch and convert full Microsoft documentation pages to markdown.
+
+- Use after search when you need full content from a specific URL
+- Required for detailed tutorials, troubleshooting, prerequisites, code samples, or when search results are incomplete or outdated
+
+## Workflow
+
+1. Use `microsoft_docs_search` to find relevant documents.
+2. If you need code examples or practical snippets, use `microsoft_code_sample_search`.
+3. If deeper or complete information is needed, use `microsoft_docs_fetch`.
+
+**Search gives breadth. Code Sample Search gives practical examples. Fetch gives depth.**
+
+All content comes from Microsoft Learn or official sources, returned in clean markdown format.
+</instruction>
+<notebookInstructions>
+To edit notebook files in the workspace, you can use the edit_notebook_file tool.
+Use the run_notebook_cell tool instead of executing Jupyter related commands in the Terminal, such as `jupyter notebook`, `jupyter lab`, `install jupyter` or the like.
+Use the copilot_getNotebookSummary tool to get the summary of the notebook (this includes the list or all cells along with the Cell Id, Cell type and Cell Language, execution details and mime types of the outputs, if any).
+Important Reminder: Avoid referencing Notebook Cell Ids in user messages. Use cell number instead.
+Important Reminder: Markdown cells cannot be executed
+</notebookInstructions>
+<outputFormatting>
+Use proper Markdown formatting: - Wrap symbol names (classes, methods, variables) in backticks: `MyClass`, `handleClick()`
+- When mentioning files or line numbers, always follow the rules in fileLinkification section below:<fileLinkification>
+When mentioning files or line numbers, always convert them to markdown links using workspace-relative paths and 1-based line numbers.
+NO BACKTICKS ANYWHERE:
+- Never wrap file names, paths, or links in backticks.
+- Never use inline-code formatting for any file reference.
+
+REQUIRED FORMATS:
+- File: [path/file.ts](path/file.ts)
+- Line: [file.ts](file.ts#L10)
+- Range: [file.ts](file.ts#L10-L12)
+
+PATH RULES:
+- Without line numbers: Display text must match the target path.
+- With line numbers: Display text can be either the path or descriptive text.
+- Use '/' only; strip drive letters and external folders.
+- Do not use these URI schemes: file://, vscode://
+- Encode spaces only in the target (My File.md → My%20File.md).
+- Non-contiguous lines require separate links. NEVER use comma-separated line references like #L10-L12, L20.
+- Valid formats: [file.ts](file.ts#L10) only. Invalid: ([file.ts#L10]) or [file.ts](file.ts)#L10
+- Only create links for files that exist in the workspace. Do not link to files you are suggesting to create or that do not exist yet.
+
+USAGE EXAMPLES:
+- With path as display: The handler is in [src/handler.ts](src/handler.ts#L10).
+- With descriptive text: The [widget initialization](src/widget.ts#L321) runs on startup.
+- Bullet list: [Init widget](src/widget.ts#L321)
+- File only: See [src/config.ts](src/config.ts) for settings.
+
+FORBIDDEN (NEVER OUTPUT):
+- Inline code: `file.ts`, `src/file.ts`, `L86`.
+- Plain text file names: file.ts, chatService.ts.
+- References without links when mentioning specific file locations.
+- Specific line citations without links ("Line 86", "at line 86", "on line 25").
+- Combining multiple line references in one link: [file.ts#L10-L12, L20](file.ts#L10-L12, L20)
+
+
+</fileLinkification>
+Use KaTeX for math equations in your answers.
+Wrap inline math equations in $.
+Wrap more complex blocks of math equations in $$.
+
+</outputFormatting>
+<memoryInstructions>
+As you work, consult your memory files to build on previous experience. When you encounter a mistake that seems like it could be common, check your memory for relevant notes — and if nothing is written yet, record what you learned.
+
+<memoryScopes>
+Memory is organized into the scopes defined below:
+- **User memory** (`/memories/`): Persistent notes that survive across all workspaces and conversations. Store user preferences, common patterns, frequently used commands, and general insights here. First 200 lines are loaded into your context automatically.
+- **Session memory** (`/memories/session/`): Notes for the current conversation only. Store task-specific context, in-progress notes, and temporary working state here. Session files are listed in your context but not loaded automatically — use the memory tool to read them when needed.
+- **Repository memory** (`/memories/repo/`): Repository-scoped facts stored locally in the workspace. Store codebase conventions, build commands, project structure facts, and verified practices here.
+
+</memoryScopes>
+
+<memoryGuidelines>
+Guidelines for user memory (`/memories/`):
+- Keep entries short and concise — use brief bullet points or single-line facts, not lengthy prose. User memory is loaded into context automatically, so brevity is critical.
+- Organize by topic in separate files (e.g., `debugging.md`, `patterns.md`).
+- Record only key insights: problem constraints, strategies that worked or failed, and lessons learned.
+- Update or remove memories that turn out to be wrong or outdated.
+- Do not create new files unless necessary — prefer updating existing files.
+Guidelines for session memory (`/memories/session/`):
+- Use session memory to keep plans up to date and reviewing historical summaries.
+- Do not create unnecessary session memory files. You should only view and update existing session files.
+
+</memoryGuidelines>
+
+
+</memoryInstructions>
+
+<instructions>
+<instructions>
+Here is a list of instruction files that contain rules for working with this codebase.
+These files are important for understanding the codebase structure, conventions, and best practices.
+Please make sure to follow the rules specified in these files when working with the codebase.
+If the file is not already available as attachment, use the 'read_file' tool to acquire it.
+Make sure to acquire the instructions before working with the codebase.
+<instruction>
+<description>**CRITICAL**: Read this file FIRST before answering ANY Azure-related questions or performing ANY Azure operations. This file must be loaded as context whenever Azure is explicitly mentioned. It provides accurate and up-to-date information about Azure. **MUST** be read when user mentions: Azure, Azure Functions, AWS Lambda to Azure Functions migration, Azure Static Web App, or any specific Azure service name. Load this instruction file ONLY for Azure-related requests, NOT for generic cloud or deployment questions.</description>
+<file>/Users/welcome/.vscode/extensions/ms-azuretools.vscode-azure-github-copilot-1.0.179-darwin-arm64/resources/azureRules/azure.instructions.md</file>
+</instruction>
+</instructions>
+
+
+<skills>
+Skills provide specialized capabilities, domain knowledge, and refined workflows for producing high-quality outputs. Each skill folder contains tested instructions for specific domains like testing strategies, API design, or performance optimization. Multiple skills can be combined when a task spans different domains.
+BLOCKING REQUIREMENT: When a skill applies to the user's request, you MUST load and read the SKILL.md file IMMEDIATELY as your first action, BEFORE generating any other response or taking action on the task. Use 'read_file' to load the relevant skill(s).
+NEVER just mention or reference a skill in your response without actually reading it first. If a skill is relevant, load it before proceeding.
+How to determine if a skill applies:
+1. Review the available skills below and match their descriptions against the user's request
+2. If any skill's domain overlaps with the task, load that skill immediately
+3. When multiple skills apply (e.g., a flowchart in documentation), load all relevant skills
+Examples:
+- "Help me write unit tests for this module" -> Load the testing skill via 'read_file' FIRST, then proceed
+- "Optimize this slow function" -> Load the performance-profiling skill via 'read_file' FIRST, then proceed
+- "Add a discount code field to checkout" -> Load both the checkout-flow and form-validation skills FIRST
+Available skills:
+<skill>
+<name>adk-cheatsheet</name>
+<description>MUST READ before writing or modifying ADK agent code. ADK API quick reference for Python — agent types, tool definitions, orchestration patterns, callbacks, and state management. Includes an index of all ADK documentation pages. Do NOT use for creating new projects (use adk-scaffold).
+</description>
+<file>/Users/welcome/.agents/skills/adk-cheatsheet/SKILL.md</file>
+</skill>
+<skill>
+<name>adk-deploy-guide</name>
+<description>MUST READ before deploying any ADK agent. ADK deployment guide — Agent Engine, Cloud Run, GKE, CI/CD pipelines, secrets, observability, and production workflows. Use when deploying agents to Google Cloud or troubleshooting deployments. Do NOT use for API code patterns (use adk-cheatsheet), evaluation (use adk-eval-guide), or project scaffolding (use adk-scaffold).
+</description>
+<file>/Users/welcome/.agents/skills/adk-deploy-guide/SKILL.md</file>
+</skill>
+<skill>
+<name>adk-dev-guide</name>
+<description>ALWAYS ACTIVE — read at the start of any ADK agent development session. ADK development lifecycle and mandatory coding guidelines — spec-driven workflow, code preservation rules, model selection, and troubleshooting.
+</description>
+<file>/Users/welcome/.agents/skills/adk-dev-guide/SKILL.md</file>
+</skill>
+<skill>
+<name>adk-eval-guide</name>
+<description>MUST READ before running any ADK evaluation. ADK evaluation methodology — eval metrics, evalset schema, LLM-as-judge, tool trajectory scoring, and common failure causes. Use when evaluating agent quality, running adk eval, or debugging eval results. Do NOT use for API code patterns (use adk-cheatsheet), deployment (use adk-deploy-guide), or project scaffolding (use adk-scaffold).
+</description>
+<file>/Users/welcome/.agents/skills/adk-eval-guide/SKILL.md</file>
+</skill>
+<skill>
+<name>adk-observability-guide</name>
+<description>MUST READ before setting up observability for ADK agents or when analyzing production traffic, debugging agent behavior, or improving agent performance. ADK observability guide — Cloud Trace, prompt-response logging, BigQuery Agent Analytics, third-party integrations, and troubleshooting. Use when configuring monitoring, tracing, or logging for agents, or when understanding how a deployed agent handles real traffic.
+</description>
+<file>/Users/welcome/.agents/skills/adk-observability-guide/SKILL.md</file>
+</skill>
+<skill>
+<name>adk-scaffold</name>
+<description>MUST READ before creating or enhancing any ADK agent project. Use when the user wants to build a new agent (e.g. "build me a search agent") or enhance an existing project (e.g. "add CI/CD to my project", "add RAG").
+</description>
+<file>/Users/welcome/.agents/skills/adk-scaffold/SKILL.md</file>
+</skill>
+<skill>
+<name>custom-project-skill</name>
+<description>Guide for executing custom project tasks with specialized knowledge and workflows. Use when user wants to work on project-specific tasks that require domain expertise.</description>
+<file>/Users/welcome/.claude/skills/custom-project-skill/SKILL.md</file>
+</skill>
+<skill>
+<name>agent-customization</name>
+<description>**WORKFLOW SKILL** — Create, update, review, fix, or debug VS Code agent customization files (.instructions.md, .prompt.md, .agent.md, SKILL.md, copilot-instructions.md, AGENTS.md). USE FOR: saving coding preferences; troubleshooting why instructions/skills/agents are ignored or not invoked; configuring applyTo patterns; defining tool restrictions; creating custom agent modes or specialized workflows; packaging domain knowledge; fixing YAML frontmatter syntax. DO NOT USE FOR: general coding questions (use default agent); runtime debugging or error diagnosis; MCP server configuration (use MCP docs directly); VS Code extension development. INVOKES: file system tools (read/write customization files), ask-questions tool (interview user for requirements), subagents for codebase exploration. FOR SINGLE OPERATIONS: For quick YAML frontmatter fixes or creating a single file from a known pattern, edit the file directly — no skill needed.</description>
+<file>copilot-skill:/agent-customization/SKILL.md</file>
+</skill>
+</skills>
+
+
+<agents>
+Here is a list of agents that can be used when running a subagent.
+Each agent has optionally a description with the agent's purpose and expertise. When asked to run a subagent, choose the most appropriate agent from this list.
+Use the 'runSubagent' tool with the agent name to run the subagent.
+<agent>
+<name>AzqrCostOptimizeAgent</name>
+<description>You are an Azure Cost Optimization Agent. Your mission is to identify, quantify, and recommend cost savings across an Azure subscription.</description>
+</agent>
+<agent>
+<name>MCP AppService Builder</name>
+<description>Plan, scaffold, extend, and deploy .NET 10 MCP App Service MCP servers with azd/Bicep and RBAC</description>
+<argumentHint>Describe the MCP server, tools to add, and your Azure subscription/resource group/location</argumentHint>
+</agent>
+<agent>
+<name>Azure IaC Exporter</name>
+<description>Export existing Azure resources to Infrastructure as Code templates via Azure Resource Graph analysis, Azure Resource Manager API calls, and azure-iac-generator integration. Use this skill when the user asks to export, convert, migrate, or extract existing Azure resources to IaC templates (Bicep, ARM Templates, Terraform, Pulumi).</description>
+<argumentHint>Specify which IaC format you want (Bicep, ARM, Terraform, Pulumi) and provide Azure resource details</argumentHint>
+</agent>
+<agent>
+<name>Azure IaC Generator</name>
+<description>Central hub for generating Infrastructure as Code (Bicep, ARM, Terraform, Pulumi) with format-specific validation and best practices. Use this skill when the user asks to generate, create, write, or build infrastructure code, deployment code, or IaC templates in any format (Bicep, ARM Templates, Terraform, Pulumi).</description>
+<argumentHint>Describe your infrastructure requirements and preferred IaC format. Can receive handoffs from export/migration agents.</argumentHint>
+</agent>
+<agent>
+<name>Explore</name>
+<description>Fast read-only codebase exploration and Q&A subagent. Prefer over manually chaining multiple search and file-reading operations to avoid cluttering the main conversation. Safe to call in parallel. Specify thoroughness: quick, medium, or thorough.</description>
+<argumentHint>Describe WHAT you're looking for and desired thoroughness (quick/medium/thorough)</argumentHint>
+</agent>
+</agents>
+
+
+</instructions>
+
+~~~
+
+### User
+~~~md
+<environment_info>
+The user's current OS is: macOS
+</environment_info>
+<workspace_info>
+I am working in a workspace with the following folders:
+- /Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent 
+I am working in a workspace that has the following structure:
+```
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+LICENSE
+pyproject.toml
+README.md
+scrapeagent/
+	__init__.py
+	agent.py
+	prompt.py
+	rich_exp.py
+	skills_loader.py
+	__pycache__/
+	skills/
+		github-trending/
+			SKILL.md
+		hacker-news/
+			SKILL.md
+		skill-creator/
+			SKILL.md
+			assets/
+				SKILL_TEMPLATE.md
+	tools/
+		__init__.py
+		file_tools.py
+		__pycache__/
+tests/
+	__init__.py
+	evalset292671.evalset.json
+	test_file_tools.py
+	test_skills_loader.py
+	__pycache__/
+```
+This is the state of the context at this point in the conversation. The view of the workspace structure may be truncated. You can use tools to collect more context if needed.
+</workspace_info>
+<userMemory>
+No user preferences or notes saved yet. Use the memory tool to store persistent notes under /memories/.
+</userMemory>
+<sessionMemory>
+Session memory (/memories/session/) is empty. No session notes have been created yet.
+</sessionMemory>
+<repoMemory>
+Repository memory (/memories/repo/) is empty. No workspace-scoped notes have been created yet.
+</repoMemory>
+
+
+[copilot_cache_control: { type: 'ephemeral' }]
+~~~
+
+### User
+~~~md
+<context>
+The current date is March 27, 2026.
+Terminals:
+Terminal: zsh
+Last Command:  source "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/.venv/bin/activate"
+Cwd: /Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent
+Exit Code: 0
+Terminal: zsh
+Last Command:  source "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/.venv/bin/activate"
+Cwd: /Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent
+Exit Code: 0
+
+</context>
+<reminderInstructions>
+When using the replace_string_in_file tool, include 3-5 lines of unchanged code before and after the string you want to replace, to make it unambiguous which part of the file should be edited.
+For maximum efficiency, whenever you plan to perform multiple independent edit operations, invoke them simultaneously using multi_replace_string_in_file tool rather than sequentially. This will greatly improve user's cost and time efficiency leading to a better user experience. Do not announce which tool you're using (for example, avoid saying "I'll implement all the changes using multi_replace_string_in_file").
+Do NOT create a new markdown file to document each change or summarize your work unless specifically requested by the user.
+<additional_skills_reminder>
+Always check if any skills apply to the user's request. If so, use the read_file tool to read the corresponding SKILL.md files. Multiple skill files may be needed for a single request. These files contain best practices built from testing that are needed for high-quality outputs.
+
+</additional_skills_reminder>
+
+</reminderInstructions>
+<userRequest>
+summary on this project
+</userRequest>
+
+~~~
+
+### Assistant
+~~~md
+
+🛠️ read_file (toolu_01WT27Rps8ZhaMoqJG3DmVTW) {
+  "filePath": "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/README.md",
+  "startLine": 1,
+  "endLine": 100
+}
+🛠️ read_file (toolu_01Nvs6ZtRnMYdSnnyxsBJF5p) {
+  "filePath": "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/pyproject.toml",
+  "startLine": 1,
+  "endLine": 50
+}
+~~~
+
+### Tool
+~~~md
+🛠️ toolu_01WT27Rps8ZhaMoqJG3DmVTW
+# ScrapeAgent
+
+[![CI](https://github.com/DamiMartinez/scrapeagent/actions/workflows/ci.yml/badge.svg)](https://github.com/DamiMartinez/scrapeagent/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Google ADK](https://img.shields.io/badge/Google%20ADK-1.25%2B-4285F4.svg)](https://google.github.io/adk-docs/)
+
+An open-source, community-driven web scraping agent powered by [Google ADK](https://google.github.io/adk-docs/) and [Agent Skills](https://agentskills.io/). Clone it, add your API key, and start scraping any website through a conversational interface — no cloud infrastructure required.
+
+Site-specific scraping knowledge lives in **Agent Skill files** (plain Markdown), not in the agent code. Anyone can contribute new scraping recipes by adding a `SKILL.md` file without touching Python.
+
+---
+
+## Prerequisites
+
+| Tool | Purpose | Install |
+|---|---|---|
+| Python 3.11+ | Runtime | [python.org](https://www.python.org/downloads/) |
+| Poetry | Python package manager | `pip install poetry` |
+| Node.js + npx | Runs `@playwright/mcp` browser tool | [nodejs.org](https://nodejs.org/) |
+| uv + uvx | Runs `mcp-server-fetch` HTTP tool | `pip install uv` |
+
+## Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/DamiMartinez/scrapeagent.git
+cd scrapeagent
+
+# 2. Install Python dependencies
+poetry install
+
+# 3. Pre-install the MCP browser tool (avoids timeout on first run)
+npm install -g @playwright/mcp
+
+# 4. Configure your API key
+cp .env.example .env
+# Edit .env — set GOOGLE_API_KEY (or the key for your chosen provider)
+
+# 5. Start the agent
+poetry run adk web
+
+# 6. Open http://localhost:8000 and start scraping
+```
+
+---
+
+## Supported Models
+
+ScrapeAgent uses [LiteLLM](https://docs.litellm.ai/docs/providers) for model-agnostic support. Set `LITELLM_MODEL` in your `.env` and provide the matching API key.
+
+| Model | `LITELLM_MODEL` value | API key env var | Notes |
+|---|---|---|---|
+| Gemini 2.5 Flash | `gemini/gemini-2.5-flash` | `GOOGLE_API_KEY` | Default. Free tier available. |
+| Gemini 2.0 Flash | `gemini/gemini-2.0-flash` | `GOOGLE_API_KEY` | Lighter alternative |
+| GPT-4o | `openai/gpt-4o` | `OPENAI_API_KEY` | OpenAI hosted |
+| Claude Sonnet 4.6 | `anthropic/claude-sonnet-4-6` | `ANTHROPIC_API_KEY` | Anthropic hosted |
+| Llama 3.2 (local) | `ollama/llama3.2` | _(none required)_ | Fully local via Ollama |
+
+---
+
+## Available Skills
+
+Skills are the brain of ScrapeAgent. Each skill documents how to scrape a specific website.
+
+| Skill | What it scrapes | Trigger phrases |
+|---|---|---|
+| `hacker-news` | Front page stories: title, URL, score, author, comments | "Hacker News", "HN", "ycombinator" |
+| `github-trending` | Trending repos by language and time period | "GitHub trending", "popular repos" |
+| `skill-creator` | Helps you create new skills through conversation | "Create a skill", "document how to scrape" |
+
+---
+
+## Architecture: How It Works
+
+ScrapeAgent is intentionally simple: one root agent with MCP browser tools and an ADK `SkillToolset`. The "expertise" lives in skill files, not in the agent's prompt.
+
+```
+┌─────────────────┬─────────────────────────┬────────────────────────────────┬────────────────────────┐
+│      Level      │       What loads        │              When              │          Size          │
+├─────────────────┼─────────────────────────┼────────────────────────────────┼────────────────────────┤
+│ L1 — Metadata   │ name + description only │ At startup, for every skill    │ ~100 tokens per skill  │
+├─────────────────┼─────────────────────────┼────────────────────────────────┼────────────────────────┤
+│ L2 — Instruc-   │ Full SKILL.md body      │ Only when the agent decides    │ <5000 tokens (1 skill) │
+│      tions      │                         │ the skill is relevant          │                        │
+├─────────────────┼─────────────────────────┼────────────────────────────────┼────────────────────────┤
+│ L3 — Resources  │ Files in references/    │ Only if skill instructions     │ On demand              │
+│                 │ and assets/             │ reference them                 │                        │
+└─────────────────┴─────────────────────────┴────────────────────────────────┴────────────────────────┘
+```
+
+**Why this matters:** A community library of 50 skills costs ~5,000 tokens at startup (50 × ~100 token descriptions). The full instruction payload for any given task is only 1–2 skill bodies. Without this pattern, baking all scraping instructions into a monolithic system prompt would blow the context window and degrade quality as the skill library grows.
+
+### Components
+
+```
+scrapeagent/
+├── agent.py          # Wires together LiteLLM model, MCP toolsets, and SkillToolset
+├── prompt.py         # Minimal orchestration prompt — expertise is in skills
+├── tools/
+~~~
+
+### Tool
+~~~md
+🛠️ toolu_01Nvs6ZtRnMYdSnnyxsBJF5p
+[project]
+name = "scrapeagent"
+version = "0.1.0"
+description = "An open-source, community-driven web scraping agent powered by Google ADK and Agent Skills."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "rich>=14.3.3",
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+google-adk = "^1.25.0"
+litellm = "^1.0"
+python-dotenv = "^1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+~~~
+
+### Assistant
+~~~md
+## ScrapeAgent Project Summary
+
+**ScrapeAgent** is an open-source, conversational web scraping agent powered by [Google ADK](https://google.github.io/adk-docs/) and [Agent Skills](https://agentskills.io/).
+
+### Core Features
+
+- **Conversational Interface**: Scrape websites through natural language at `http://localhost:8000`
+- **Skills-Based Architecture**: Site-specific scraping knowledge lives in Markdown `SKILL.md` files, not Python code
+- **Multi-Model Support**: Works with Gemini, GPT-4o, Claude, or local Llama via LiteLLM
+- **No Cloud Required**: Runs locally with just Python 3.11+, Poetry, Node.js, and an API key
+- **Community-Driven**: Easy to contribute new scraping recipes without touching Python
+
+### Available Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `hacker-news` | Scrape HN front page stories (title, URL, score, author, comments) |
+| `github-trending` | Extract trending repos by language and time period |
+| `skill-creator` | Help create new skills conversationally |
+
+### Architecture Highlights
+
+- **L1 (Metadata)**: Skill names + descriptions load at startup (~100 tokens each)
+- **L2 (Instructions)**: Full `SKILL.md` contents load only when relevant to the task (<5,000 tokens)
+- **L3 (Resources)**: Referenced files/assets load on-demand
+- **Tools**: Uses `@playwright/mcp` for browser automation and `mcp-server-fetch` for HTTP requests
+
+This tiered approach keeps context windows efficient while supporting a growing community library of scraping skills.
+~~~
+
+### User
+~~~md
+<context>
+The current date is March 27, 2026.
+Terminals:
+Terminal: zsh
+Last Command:  source "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/.venv/bin/activate"
+Cwd: /Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent
+Exit Code: 0
+Terminal: zsh
+Last Command:  source "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/.venv/bin/activate"
+Cwd: /Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent
+Exit Code: 0
+
+</context>
+<reminderInstructions>
+When using the replace_string_in_file tool, include 3-5 lines of unchanged code before and after the string you want to replace, to make it unambiguous which part of the file should be edited.
+For maximum efficiency, whenever you plan to perform multiple independent edit operations, invoke them simultaneously using multi_replace_string_in_file tool rather than sequentially. This will greatly improve user's cost and time efficiency leading to a better user experience. Do not announce which tool you're using (for example, avoid saying "I'll implement all the changes using multi_replace_string_in_file").
+Do NOT create a new markdown file to document each change or summarize your work unless specifically requested by the user.
+<additional_skills_reminder>
+Always check if any skills apply to the user's request. If so, use the read_file tool to read the corresponding SKILL.md files. Multiple skill files may be needed for a single request. These files contain best practices built from testing that are needed for high-quality outputs.
+
+</additional_skills_reminder>
+
+</reminderInstructions>
+<userRequest>
+in the above query what is content is going through model (requst) and what is response in .md file i want debug what is full inputs include (user message,prompt,tools and model) and what is output full output 
+</userRequest>
+
+~~~
+
+### Assistant
+~~~md
+
+🛠️ read_file (toolu_01KtWi8T7iojBvja8RybNKFb) {
+  "filePath": "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/scrapeagent/agent.py",
+  "startLine": 1,
+  "endLine": 150
+}
+🛠️ read_file (toolu_01RuwxhuwoUHtj7qxZ9hU9sh) {
+  "filePath": "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/scrapeagent/prompt.py",
+  "startLine": 1,
+  "endLine": 100
+}
+🛠️ read_file (toolu_01KajLQkjaN2VpYTQwtbJUw5) {
+  "filePath": "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/scrapeagent/skills_loader.py",
+  "startLine": 1,
+  "endLine": 100
+}
+~~~
+
+### Tool
+~~~md
+🛠️ toolu_01KtWi8T7iojBvja8RybNKFb
+import os
+import pathlib
+from dotenv import load_dotenv
+from google.adk.agents import LlmAgent
+from google.adk.models.lite_llm import LiteLlm
+from google.adk.tools import skill_toolset
+from scrapeagent.skills_loader import load_skill_from_dir
+from google.adk.tools.mcp_tool.mcp_toolset import McpToolset
+from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+from mcp import StdioServerParameters
+from scrapeagent.prompt import PROMPT
+from scrapeagent.tools.file_tools import save_output, create_skill
+
+load_dotenv()
+
+# --- Load skills from the skills directory ---
+# Architecture note: Skills use progressive disclosure to keep the context window lean.
+# At startup, only L1 metadata (~100 tokens per skill) is loaded for every skill.
+# The full SKILL.md body (L2) is loaded only when the agent decides the skill is relevant.
+# L3 resources (references/ and assets/) are loaded only when the skill instructions reference them.
+# A library of 50 skills costs ~5000 tokens at startup vs. blowing the context window with
+# a monolithic system prompt. See README.md for the full architecture explanation.
+_skills_dir = pathlib.Path(__file__).parent / "skills"
+_skills = [
+    load_skill_from_dir(d) for d in sorted(_skills_dir.iterdir()) if d.is_dir()
+]
+
+# SkillToolset exposes all skills to the agent with progressive loading.
+# See the comment above — only skill descriptions are in context at startup.
+skill_tools = skill_toolset.SkillToolset(skills=_skills)
+
+# --- MCP toolsets ---
+# mcp-server-fetch: lightweight HTTP fetcher for static sites (no JS rendering)
+fetch_toolset = McpToolset(
+    connection_params=StdioConnectionParams(
+        server_params=StdioServerParameters(
+            command="uvx",
+            args=["mcp-server-fetch"],
+        ),
+        timeout=30.0,
+    )
+)
+
+# @playwright/mcp: full browser automation for JS-heavy sites
+# -y flag required: auto-accepts npx package download in non-interactive environments
+playwright_toolset = McpToolset(
+    connection_params=StdioConnectionParams(
+        server_params=StdioServerParameters(
+            command="npx",
+            args=["-y", "@playwright/mcp", "--headless"],
+        ),
+        timeout=30.0,
+    )
+)
+
+# --- Root agent ---
+root_agent = LlmAgent(
+    #model=LiteLlm(model=os.getenv("LITELLM_MODEL", "gemini/gemini-2.5-flash")),
+    model = LiteLlm(model=os.getenv("LITELLM_MODEL", "openai/gpt-4")),
+    name="scrapeagent",
+    description=(
+        "An open-source web scraping agent. "
+        "Scrapes any website and saves results as CSV, JSON, or Markdown."
+    ),
+    instruction=PROMPT,
+    tools=[
+        skill_tools,
+        fetch_toolset,
+        playwright_toolset,
+        save_output,
+        create_skill,
+    ],
+)
+
+~~~
+
+### Tool
+~~~md
+🛠️ toolu_01RuwxhuwoUHtj7qxZ9hU9sh
+PROMPT = """
+You are ScrapeAgent, an open-source web scraping assistant.
+
+## Your job
+Help users extract data from websites and save the results as CSV, JSON, or Markdown.
+
+## How to work
+1. Understand what the user wants to scrape (URL, data fields, output format)
+2. Check if a skill exists for that website — if yes, follow its instructions exactly
+3. If no skill exists, use fetch (for static sites) or playwright (for JS-heavy sites)
+   to explore the page structure and extract the requested data
+4. Save results using the save_output tool — default format is CSV
+5. Report success with the output file path
+
+## Tool selection
+- Use `fetch` for static sites (plain HTML, no JavaScript required)
+- Use `playwright` for dynamic sites (JavaScript rendering, SPAs, login walls)
+- Start with fetch; switch to playwright if the page content is empty or incomplete
+
+## Output
+- Default output directory: ./output/
+- Filenames: use a descriptive name based on the site and data, e.g., hn_stories_2024-02-26
+
+## Creating new skills
+If the user asks to create a skill or document how to scrape a website,
+activate the skill-creator skill and follow its workflow.
+
+Be concise. Focus on getting the data and saving it correctly.
+"""
+
+~~~
+
+### Tool
+~~~md
+🛠️ toolu_01KajLQkjaN2VpYTQwtbJUw5
+"""Load Agent Skills from directory structure into google.adk.skills.models.Skill objects."""
+
+from __future__ import annotations
+
+import pathlib
+
+import yaml
+from google.adk.skills.models import Frontmatter, Resources, Skill
+
+
+def load_skill_from_dir(skill_dir: pathlib.Path) -> Skill:
+    """Parse a skill directory into a Skill object.
+
+    Expected layout:
+        skill_dir/
+            SKILL.md          # YAML frontmatter + markdown body (required)
+            references/*.md   # optional reference files
+            assets/*          # optional asset files
+    """
+    skill_md_path = skill_dir / "SKILL.md"
+    if not skill_md_path.exists():
+        raise FileNotFoundError(f"SKILL.md not found in {skill_dir}")
+
+    raw = skill_md_path.read_text(encoding="utf-8")
+
+    # Split YAML frontmatter from markdown body
+    if not raw.startswith("---"):
+        raise ValueError(f"{skill_md_path} must start with YAML frontmatter (---)")
+
+    parts = raw.split("---", 2)
+    # parts[0] = '' | parts[1] = frontmatter YAML | parts[2] = body
+    fm_data = yaml.safe_load(parts[1])
+    body = parts[2].strip() if len(parts) > 2 else ""
+
+    metadata = fm_data.get("metadata", {}) or {}
+    frontmatter = Frontmatter(
+        name=fm_data["name"],
+        description=fm_data["description"],
+        metadata={str(k): str(v) for k, v in metadata.items()},
+    )
+
+    # Load references/ (markdown files)
+    references: dict[str, str] = {}
+    refs_dir = skill_dir / "references"
+    if refs_dir.is_dir():
+        for f in sorted(refs_dir.glob("*.md")):
+            references[f.name] = f.read_text(encoding="utf-8")
+
+    # Load assets/ (any file type, read as text)
+    assets: dict[str, str] = {}
+    assets_dir = skill_dir / "assets"
+    if assets_dir.is_dir():
+        for f in sorted(p for p in assets_dir.iterdir() if p.is_file()):
+            assets[f.name] = f.read_text(encoding="utf-8")
+
+    return Skill(
+        frontmatter=frontmatter,
+        instructions=body,
+        resources=Resources(references=references, assets=assets),
+    )
+
+~~~
+
+### Assistant
+~~~md
+
+🛠️ read_file (toolu_01JERTUGygEEKWeTDR3tVpuH) {
+  "endLine": 50,
+  "filePath": "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/scrapeagent/rich_exp.py",
+  "startLine": 1
+}
+🛠️ read_file (toolu_01Sf8X4fTapP1QjhGaerWL7y) {
+  "endLine": 100,
+  "filePath": "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/scrapeagent/tools/file_tools.py",
+  "startLine": 1
+}
+~~~
+
+### Tool
+~~~md
+🛠️ toolu_01JERTUGygEEKWeTDR3tVpuH
+from rich.console import Console
+from rich.table import Table
+
+console = Console()
+
+def log_interaction(query, order_data, answer):
+    table = Table(title="Interaction")
+    table.add_column("Field", style="cyan")
+    table.add_column("Value", style="green")
+    table.add_row("Query", query)
+    table.add_row("Order ID", order_data.get("order_id", "N/A"))
+    table.add_row("Answer", answer)
+    console.print(table)
+log_interaction(query="What is the status of order #12345?", order_data={"order_id": "12345"}, answer="Your order #12345 is currently being processed and is expected to ship within 2 business days.")
+~~~
+
+### Tool
+~~~md
+🛠️ toolu_01Sf8X4fTapP1QjhGaerWL7y
+import csv
+import json
+from pathlib import Path
+from typing import Any
+
+
+def save_output(
+    data: list[dict[str, Any]],
+    filename: str,
+    format: str = "csv",
+) -> str:
+    """
+    Save scraped data to a file.
+
+    Args:
+        data: List of dicts representing scraped rows/records.
+        filename: Output filename without extension.
+        format: Output format — "csv", "json", or "md".
+
+    Returns:
+        Confirmation message with the output file path.
+    """
+    output_dir = Path("output")
+    output_dir.mkdir(exist_ok=True)
+    filepath = output_dir / f"{filename}.{format}"
+
+    if format == "csv":
+        if not data:
+            return "No data to save."
+        keys = list(data[0].keys())
+        with open(filepath, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=keys)
+            writer.writeheader()
+            writer.writerows(data)
+
+    elif format == "json":
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
+    elif format == "md":
+        if not data:
+            return "No data to save."
+        keys = list(data[0].keys())
+        lines = ["| " + " | ".join(keys) + " |"]
+        lines.append("| " + " | ".join(["---"] * len(keys)) + " |")
+        for row in data:
+            lines.append("| " + " | ".join(str(row.get(k, "")) for k in keys) + " |")
+        filepath.write_text("\n".join(lines), encoding="utf-8")
+
+    else:
+        return f"Unknown format '{format}'. Use csv, json, or md."
+
+    return f"Saved {len(data)} records to {filepath}"
+
+
+def create_skill(
+    skill_name: str,
+    description: str,
+    instructions: str,
+    references: dict[str, str] | None = None,
+) -> str:
+    """
+    Create a new skill directory with SKILL.md and optional reference files.
+
+    Args:
+        skill_name: Kebab-case skill name matching the Agent Skills spec (e.g., 'amazon-products').
+                    Must be lowercase, hyphenated, no consecutive hyphens, no leading/trailing hyphens.
+        description: 1-2 sentence description. Must describe what it scrapes AND when to use it.
+        instructions: Full markdown body for the SKILL.md file (the scraping instructions).
+        references: Optional dict mapping filename -> content for the references/ subdirectory.
+
+    Returns:
+        Confirmation message with the created skill path.
+    """
+    skills_dir = Path(__file__).parent.parent / "skills"
+    skill_dir = skills_dir / skill_name
+
+    if skill_dir.exists():
+        return (
+            f"Skill '{skill_name}' already exists at {skill_dir}. "
+            "Choose a different name or delete the existing skill first."
+        )
+
+    skill_dir.mkdir(parents=True)
+
+    skill_md = f"""---
+name: {skill_name}
+description: {description}
+metadata:
+  author: community
+  version: "1.0"
+---
+
+{instructions}
+"""
+    (skill_dir / "SKILL.md").write_text(skill_md, encoding="utf-8")
+
+    if references:
+        refs_dir = skill_dir / "references"
+        refs_dir.mkdir()
+
+[copilot_cache_control: { type: 'ephemeral' }]
+~~~
+
+### Assistant
+~~~md
+## Request/Response Flow Debug Guide
+
+Here's the **full input-output pipeline** for ScrapeAgent:
+
+### **REQUEST FLOW (What goes to the model)** 📥
+
+```
+User Message (from web UI)
+    ↓
+[agent.py - root_agent receives message]
+    ↓
+Assembles a request with:
+├─ User Message
+├─ System Prompt (PROMPT from prompt.py)
+├─ Available Tools:
+│  ├─ skill_tools (SkillToolset with all skill descriptions)
+│  ├─ fetch_toolset (HTTP fetcher)
+│  ├─ playwright_toolset (browser automation)
+│  ├─ save_output (file saver)
+│  └─ create_skill (skill creator)
+├─ Model: openai/gpt-4 (or LITELLM_MODEL env var)
+└─ Conversation History (if multi-turn)
+    ↓
+[LiteLlM routes to LLM API]
+```
+
+### **Key Files for Request Assembly**
+
+| File | Role | Contains |
+|------|------|----------|
+| [scrapeagent/agent.py](scrapeagent/agent.py#L1-L67) | Main orchestrator | Model, tools, instructions, root_agent config |
+| [scrapeagent/prompt.py](scrapeagent/prompt.py) | System prompt | The `PROMPT` variable sent to every request |
+| [scrapeagent/skills_loader.py](scrapeagent/skills_loader.py) | Skill parser | Loads SKILL.md frontmatter + instructions |
+
+---
+
+### **WHAT THE MODEL RECEIVES**
+
+**1. System Message (Static)**
+```python
+# From prompt.py - this is sent with every request
+PROMPT = """
+You are ScrapeAgent, an open-source web scraping assistant.
+
+## Your job
+Help users extract data from websites and save the results as CSV, JSON, or Markdown.
+
+## How to work
+1. Understand what the user wants to scrape (URL, data fields, output format)
+2. Check if a skill exists for that website — if yes, follow its instructions exactly
+...
+"""
+```
+
+**2. User Message**
+```
+Example: "Scrape the top 10 stories from Hacker News"
+```
+
+**3. Available Tools (in tool descriptions)**
+```
+Tool 1: SkillToolset
+- Exposes all skills in the `skills/` directory
+- Each skill has:
+  - L1 (at startup): name + description only (~100 tokens)
+  - L2 (when relevant): full SKILL.md instructions (<5000 tokens)
+  - L3 (on demand): references/ and assets/
+
+Tool 2: fetch_toolset
+- HTTP fetcher via mcp-server-fetch
+- For static sites
+
+Tool 3: playwright_toolset  
+- Browser automation via @playwright/mcp
+- For JS-heavy sites
+
+Tool 4: save_output
+- Saves data as CSV/JSON/Markdown
+
+Tool 5: create_skill
+- Creates new SKILL.md files
+```
+
+**4. Model Config**
+```python
+# From agent.py line 63
+model = LiteLlm(model=os.getenv("LITELLM_MODEL", "openai/gpt-4"))
+```
+
+---
+
+### **RESPONSE FLOW (What comes from the model)** 📤
+
+```
+LLM Response (with tool calls or final answer)
+    ↓
+[ADK Agent processes response]
+    ├─ If tool call: executes tool
+    │  ├─ Fetch/Playwright: retrieves page HTML/content
+    │  ├─ Skills: loads relevant SKILL.md and follows instructions
+    │  └─ Save: writes file to ./output/
+    │
+    ├─ Passes tool result back to model
+    │
+    └─ Repeats until "No more tools" or final answer
+        ↓
+    Returns final response to user
+```
+
+---
+
+### **DEBUG: Log Full Request/Response**
+
+To debug what's actually being sent/received, add this to [scrapeagent/agent.py](scrapeagent/agent.py):
+
+```python
+import json
+from google.adk.agents import LlmAgent
+
+# Patch LlmAgent to log all requests/responses
+original_step = LlmAgent.step
+
+async def debug_step(self, *args, **kwargs):
+    print("\n" + "="*80)
+    print("📥 REQUEST TO MODEL")
+    print("="*80)
+    print(f"User Message: {args[0] if args else 'No message'}")
+    print(f"\nAvailable Tools: {[t.name for t in self.tools]}")
+    print(f"\nPrompt: {self.instruction[:200]}...")
+    
+    result = await original_step(*args, **kwargs)
+    
+    print("\n" + "="*80)
+    print("📤 RESPONSE FROM MODEL")
+    print("="*80)
+    print(f"Result: {json.dumps(str(result), indent=2)}")
+    print("="*80 + "\n")
+    
+    return result
+
+LlmAgent.step = debug_step
+```
+
+---
+
+### **Summary Table**
+
+| Component | Location | Sent to Model? | Example |
+|-----------|----------|---|---------|
+| **User Message** | Web UI input | ✅ Yes | "Scrape Hacker News" |
+| **System Prompt** | [prompt.py](scrapeagent/prompt.py) | ✅ Yes | "You are ScrapeAgent..." |
+| **Skill Descriptions (L1)** | [agent.py](scrapeagent/agent.py#L24) loaded from [skills/*/SKILL.md](scrapeagent/skills) | ✅ Yes (~100 tokens) | "hacker-news: Scrapes HN stories" |
+| **Full Skill Instructions (L2)** | [skills_loader.py](scrapeagent/skills_loader.py) | ✅ Yes (only if relevant) | Full markdown body |
+| **Tool Definitions** | [agent.py](scrapeagent/agent.py#L68-L77) | ✅ Yes | fetch, playwright, save_output, etc. |
+| **Model Name** | [agent.py](scrapeagent/agent.py#L63) | ✅ Used to route request | "openai/gpt-4" |
+| **Tool Results** | Returned from tool execution | ✅ Yes (in next turn) | HTML content, file paths |
+
+[copilot_cache_control: { type: 'ephemeral' }]
+~~~
+
+### User
+~~~md
+<context>
+The current date is March 27, 2026.
+Terminals:
+Terminal: zsh
+Last Command:  source "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/.venv/bin/activate"
+Cwd: /Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent
+Exit Code: 0
+Terminal: zsh
+Last Command:  source "/Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent/.venv/bin/activate"
+Cwd: /Users/welcome/Library/Mobile Documents/com~apple~CloudDocs/Tech_Learn/Tech_Repos/python_envs/skills_loading/scrapeagent
+Exit Code: 0
+
+</context>
+<reminderInstructions>
+When using the replace_string_in_file tool, include 3-5 lines of unchanged code before and after the string you want to replace, to make it unambiguous which part of the file should be edited.
+For maximum efficiency, whenever you plan to perform multiple independent edit operations, invoke them simultaneously using multi_replace_string_in_file tool rather than sequentially. This will greatly improve user's cost and time efficiency leading to a better user experience. Do not announce which tool you're using (for example, avoid saying "I'll implement all the changes using multi_replace_string_in_file").
+Do NOT create a new markdown file to document each change or summarize your work unless specifically requested by the user.
+<additional_skills_reminder>
+Always check if any skills apply to the user's request. If so, use the read_file tool to read the corresponding SKILL.md files. Multiple skill files may be needed for a single request. These files contain best practices built from testing that are needed for high-quality outputs.
+
+</additional_skills_reminder>
+
+</reminderInstructions>
+<userRequest>
+hi
+</userRequest>
+
+
+[copilot_cache_control: { type: 'ephemeral' }]
+~~~
+
+
+
+## Response
+### Assistant
+~~~md
+Hey! 👋 How can I help with your ScrapeAgent project?
+~~~
+
+
+<style>
+[id^="system"], [id^="user"], [id^="assistant"] {
+		margin: 4px 0 4px 0;
+}
+
+.markdown-body > pre {
+		padding: 4px 16px;
+}
+</style>
