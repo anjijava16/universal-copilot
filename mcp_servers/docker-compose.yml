@@ -1,0 +1,179 @@
+version: '3.8'
+
+services:
+  mcp-file-directory:
+    build:
+      context: ./01-mcp-file-directory-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+    volumes:
+      - ./workspace:/workspace
+    restart: unless-stopped
+
+  mcp-file-operations:
+    build:
+      context: ./02-mcp-file-operations-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      - PORT=8002
+    volumes:
+      - ./workspace:/workspace
+    restart: unless-stopped
+
+  mcp-search-discovery:
+    build:
+      context: ./03-mcp-search-discovery-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      - PORT=8003
+    restart: unless-stopped
+
+  mcp-notebook-operations:
+    build:
+      context: ./04-mcp-notebook-operations-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8004:8004"
+    environment:
+      - PORT=8004
+    volumes:
+      - ./notebooks:/notebooks
+    restart: unless-stopped
+
+  mcp-vscode-integration:
+    build:
+      context: ./05-mcp-vscode-integration-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8005:8005"
+    environment:
+      - PORT=8005
+    restart: unless-stopped
+
+  mcp-terminal-process:
+    build:
+      context: ./06-mcp-terminal-process-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8006:8006"
+    environment:
+      - PORT=8006
+    restart: unless-stopped
+
+  mcp-memory-management:
+    build:
+      context: ./07-mcp-memory-management-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8007:8007"
+    environment:
+      - PORT=8007
+    volumes:
+      - ./memories:/memories
+    restart: unless-stopped
+
+  mcp-task-todo:
+    build:
+      context: ./08-mcp-task-todo-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8008:8008"
+    environment:
+      - PORT=8008
+    restart: unless-stopped
+
+  mcp-azure-auth:
+    build:
+      context: ./09-mcp-azure-auth-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8009:8009"
+    environment:
+      - PORT=8009
+      - AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
+    restart: unless-stopped
+
+  mcp-azure-services:
+    build:
+      context: ./10-mcp-azure-services-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8010:8010"
+    environment:
+      - PORT=8010
+      - AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}
+    restart: unless-stopped
+
+  mcp-azure-cli:
+    build:
+      context: ./11-mcp-azure-cli-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8011:8011"
+    environment:
+      - PORT=8011
+    restart: unless-stopped
+
+  mcp-python-env:
+    build:
+      context: ./12-mcp-python-env-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8012:8012"
+    environment:
+      - PORT=8012
+    volumes:
+      - ./python_envs:/python_envs
+    restart: unless-stopped
+
+  mcp-python-analysis:
+    build:
+      context: ./13-mcp-python-analysis-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8013:8013"
+    environment:
+      - PORT=8013
+    restart: unless-stopped
+
+  mcp-microsoft-docs:
+    build:
+      context: ./14-mcp-microsoft-docs-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8014:8014"
+    environment:
+      - PORT=8014
+    restart: unless-stopped
+
+  mcp-specialized-tools:
+    build:
+      context: ./15-mcp-specialized-tools-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8015:8015"
+    environment:
+      - PORT=8015
+    restart: unless-stopped
+
+  mcp-subagent:
+    build:
+      context: ./16-mcp-subagent-server
+      dockerfile: ../Dockerfile
+    ports:
+      - "8016:8016"
+    environment:
+      - PORT=8016
+    restart: unless-stopped
+
+networks:
+  default:
+    name: mcp-network
